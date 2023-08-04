@@ -1,12 +1,11 @@
 const path = require('path');
-require('ts-node').register({
+const { register } = require('ts-node');
+register({
     project: path.resolve(process.cwd(), 'tsconfig.json')
 });
+const { ChildError } =  require(path.resolve(__filename.replace(".js", "Error.ts")));
 try {
     require(path.resolve(__filename.replace(".js", ".ts")));
 } catch (e) {
-    throw {
-        diagnosticText: e.diagnosticText,
-        diagnosticCodes: e.diagnosticCodes
-    };
+    throw new ChildError(e.diagnosticText, e.diagnosticCodes);
 }
