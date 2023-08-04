@@ -16,6 +16,11 @@ jobs:
           node-version: '16.20.x'
       - run: npm ci
       - run: npm run build
+      - name: Setup git
+        run: |
+          git config --global advice.addIgnoredFile false
+          git config --global user.name "DevTrackap"
+          git config --global user.email "dev@trackap.com"
       - run: git add ./dist/*
       - run: git commit -am "Build [skip ci]"
       - run: git push
