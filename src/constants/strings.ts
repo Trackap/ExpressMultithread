@@ -26,6 +26,9 @@ export const childNotFound = "Child not found";
 export const noMain = "This file is not meant to be run in the main thread.";
 export const noParentPort = "No parent port";
 export const unknownCmd = "Unknown command";
+export const invalidThreadCount = "Invalid thread count";
+export const routeNotFound = "Route not found";
+export const notImplemented = "Not implemented";
 
 /* Console */
 export const Reset = "\x1b[0m"
