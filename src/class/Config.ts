@@ -2,18 +2,16 @@
 import { Request } from "express";
 import { cpus } from "os";
 
-/* Classes */
-// import Parent from "./Parent";
-
 /* Functions */
 import { cleanRequest as __cleanRequest } from "../functions/cleanRequest";
+import { merge } from "../functions/utils/mergeObject";
 
 /* Constants */
 import { invalidThreadCount } from "../constants/strings";
-// import { isMainThread } from "worker_threads";
 
 class Config {
-    private _cleanRequest: (req: Request) => Request = __cleanRequest;
+    private _orig: (req: Request) => Request = __cleanRequest;
+    private _custom: ((req: Request) => Request) | undefined = undefined;
     private _threadCount: number = process.env.THREAD_COUNT === undefined ? cpus().length : parseInt(process.env.THREAD_COUNT);
 
 
@@ -25,11 +23,14 @@ class Config {
     }
 
     public get cleanRequest() : (req: Request) => Request {
-        return this._cleanRequest;
+        if (this._custom) {
+            return (req : Request) => merge(this._custom!(req), this._orig(req));
+        }
+        return this._orig;
     };
 
-    public set setCleanRequest(value: (req: Request) => Request) {
-        this._cleanRequest = value;
+    public set cleanRequest(value: ((req: Request) => Request) | undefined) {
+        this._custom = value;
     };
 };
 
