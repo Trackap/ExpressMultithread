@@ -9,12 +9,13 @@ import Multithreaded from "../../src/index";
 
 /* Create express app */
 const App = express();
-/* Route which run on main thread */
-App.get("/main", (_req: any, res: any, _next: any) => {
-    res.send("I'm  running on main thread !");
-});
 
-/* Import controllers with a directory, will walk recursively on it and import all controllers & methods */
+/* Global middleware, which runs on MainThread */
+App.use([
+    express.json()
+]);
+
+/* Import controllers which run on child threads */
 Multithreaded.importControllers(__dirname + "/controllers");
 
 /* Use Multithreaded router */
