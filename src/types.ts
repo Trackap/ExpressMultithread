@@ -20,12 +20,15 @@ export interface InternalRoute {
     path: string;
     middlewares: Middleware[];
     cb: Callback;
+    callstack?: (Middleware | Callback)[];
+    endpoint?: string;
 }
 
 export interface Task {
     endpoint: string;
     req: Request;
     res: Response;
+    next: NextFunction;
     id: string;
 }
 
@@ -34,4 +37,19 @@ export interface ChildData {
     instance: Worker;
     ready: boolean;
     tasks: Task[];
+}
+
+export enum ChildCmd {
+    ready = 0,
+    response = 1,
+    next = 2
+}
+
+export enum ParentCmd {
+    addSource = 0,
+    request = 1
+}
+
+export interface Msg<T extends ParentCmd | ChildCmd>{
+    cmd: T;
 }
