@@ -28,9 +28,10 @@ function exploreController(module : any) : Record<string, InternalRoute> | undef
         /* Merge all calls */
         const callstack = [...controllerMid, ...route.middlewares, route.cb]; // TODO HANDLE WRAPPER & THREADS_COUNT
         /* Register route */
-        routes[endpoint] = {
+        routes[ route.method +  endpoint] = {
             ...route,
-            callstack
+            callstack,
+            endpoint
         };
     }
     return routes;
