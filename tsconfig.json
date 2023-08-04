@@ -5,6 +5,7 @@
     "moduleResolution": "Node",
     "outDir": "dist",
     "strict": true,
+    "declaration": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -25,5 +26,7 @@
     "strictPropertyInitialization": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "examples"]
 }

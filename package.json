@@ -2,16 +2,16 @@
   "name": "expressmultithread",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/plugin.cjs.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/index.js",
   "files": [
     "dist/"
   ],
   "scripts": {
     "clean": "rimraf ./dist",
-    "build": "npm run clean && tsc && rollup -c rollup.config.js"
+    "build": "npm run clean && tsc"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,9 @@
   },
   "keywords": [
     "Express",
-    "Multithread"
+    "Multithread",
+    "Decorators",
+    "Typescript"
   ],
   "author": "mderoulou",
   "license": "MIT",
@@ -35,7 +37,6 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/node": "^20.4.5",
-    "rimraf": "^5.0.1",
-    "rollup": "^3.26.3"
+    "rimraf": "^5.0.1"
   }
 }
