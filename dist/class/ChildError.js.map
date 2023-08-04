@@ -1,0 +1,1 @@
+{"version":3,"file":"ChildError.js","sourceRoot":"","sources":["../../src/class/ChildError.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;IAAgC,8BAAK;IAIjC,oBAAY,cAAuB,EAAE,eAAyB;QAA9D,YACI,kBAAM,cAAc,CAAC,SAGxB;QAFG,KAAI,CAAC,cAAc,GAAG,cAAc,CAAC;QACrC,KAAI,CAAC,eAAe,GAAG,eAAe,CAAC;;IAC3C,CAAC;IAAA,CAAC;IACN,iBAAC;AAAD,CAAC,AATD,CAAgC,KAAK,GASpC;AATY,gCAAU;AAStB,CAAC"}
