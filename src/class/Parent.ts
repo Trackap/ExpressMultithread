@@ -2,7 +2,6 @@
 import { TSError } from 'ts-node';
 import { Worker, isMainThread } from 'worker_threads';
 import { randomUUID } from 'crypto';
-import wrap from "spawn-wrap";
 
 /* Classes */
 import { ChildError } from './ChildError';
