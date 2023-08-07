@@ -39,6 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Instance = void 0;
 var ts_node_1 = require("ts-node");
 var worker_threads_1 = require("worker_threads");
 var crypto_1 = require("crypto");
@@ -51,6 +52,7 @@ var Parent = (function () {
     function Parent(threadCount) {
         if (threadCount === void 0) { threadCount = Config_1.default.threadCount; }
         this.childs = [];
+        this.sources = [];
         this.taskQueue = [];
         this.inc = 0;
         for (var i = 0; i < threadCount; i++) {
@@ -90,7 +92,12 @@ var Parent = (function () {
             }
         });
         child.on(strings_1.error, function (e) {
+            console.log(e);
             throw new ts_node_1.TSError(e.diagnosticText, e.diagnosticCodes);
+        });
+        (0, postMessage_1.postChild)(child, {
+            cmd: types_1.ParentCmd.addSource,
+            source: this.sources
         });
         this.childs.push({
             id: this.inc,
@@ -150,6 +157,8 @@ var Parent = (function () {
     };
     ;
     Parent.prototype.addSource = function (source) {
+        var _a;
+        (_a = this.sources).push.apply(_a, source);
         for (var i = 0; i < this.childs.length; i++) {
             (0, postMessage_1.postChild)(this.childs[i].instance, {
                 cmd: types_1.ParentCmd.addSource,
@@ -158,10 +167,23 @@ var Parent = (function () {
         }
     };
     ;
+    Parent.prototype.close = function () {
+        for (var i = 0; i < this.childs.length; i++) {
+            this.childs[i].instance.terminate();
+        }
+    };
+    Object.defineProperty(Parent.prototype, "sourcesList", {
+        get: function () {
+            return this.sources;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    ;
     return Parent;
 }());
 ;
-var Instance = worker_threads_1.isMainThread ? new Parent() : null;
-Instance === null || Instance === void 0 ? void 0 : Instance.run();
-exports.default = Instance;
+exports.Instance = worker_threads_1.isMainThread ? new Parent() : null;
+exports.Instance === null || exports.Instance === void 0 ? void 0 : exports.Instance.run();
+exports.default = exports.Instance;
 //# sourceMappingURL=Parent.js.map
