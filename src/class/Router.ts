@@ -20,8 +20,6 @@ const defaultPath = process.cwd();
 export class MultithreadedRouter {
     /* List of all routes */
     public routes: Record<string, InternalRoute> = {};
-    /* Sources of imports for thread workers */
-    protected sources: string[] = [];
     /* Middlewares */
     protected middlewares: Middleware[] = [];
     /* Express Router */
@@ -41,9 +39,6 @@ export class MultithreadedRouter {
     };
 
     /*  Getters */
-    public get _sources() : string[] {
-        return this.sources;
-    };
     public get router() : ExpressRouter {
         return this._router;
     };
