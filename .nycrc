@@ -1,0 +1,10 @@
+{
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "all": true,
+    "extension": [".ts", ".js"],
+    "include": ["src/**/*.ts", "src/**/*.js"],
+    "reporter": ["html", "lcov"],
+    "check-coverage": true,
+    "report-dir": "coverage",
+    "useSpawnWrap": true
+}
