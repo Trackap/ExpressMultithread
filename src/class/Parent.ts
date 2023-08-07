@@ -2,6 +2,7 @@
 import { TSError } from 'ts-node';
 import { Worker, isMainThread } from 'worker_threads';
 import { randomUUID } from 'crypto';
+import wrap from "spawn-wrap";
 
 /* Classes */
 import { ChildError } from './ChildError';
@@ -19,8 +20,13 @@ import { childFile, childNotFound, error, message, slash, unknownCmd } from '../
 import { postChild } from '../functions/utils/postMessage';
 
 class Parent {
+    /* List of all childs */
     private childs: ChildData[] = [];
+    /* Sources of imports for thread workers */
+    private sources: string[] = [];
+    /* List of unassigned tasks */
     private taskQueue: Task[] = [];
+    /* Incremental id for childs */
     private inc : number = 0;
 
     constructor(threadCount : number = Config.threadCount) {
@@ -64,7 +70,13 @@ class Parent {
         });
         /* Handle child errors */
         child.on(error, (e: ChildError) => {
+            console.log(e)
             throw new TSError(e.diagnosticText, e.diagnosticCodes);
+        });
+        /* Update child sources */
+        postChild(child, {
+            cmd: ParentCmd.addSource,
+            source: this.sources
         });
         /* Save child */
         this.childs.push({
@@ -124,6 +136,8 @@ class Parent {
     };
 
     public addSource(source : string[]) : void {
+        /* Add source to sources */
+        this.sources.push(...source);
         /* Send new sources to childs */
         for (let i = 0; i < this.childs.length; i++) {
             postChild(this.childs[i].instance, {
@@ -132,9 +146,19 @@ class Parent {
             });
         }
     };
+
+    public close() : void {
+        for (let i = 0; i < this.childs.length; i++) {
+            this.childs[i].instance.terminate();
+        }
+    }
+
+    public get sourcesList() : string[] {
+        return this.sources;
+    };
 };
 
-const Instance = isMainThread ? new Parent() : null;
+export const Instance = isMainThread ? new Parent() : null;
 Instance?.run();
 
 export default Instance;
