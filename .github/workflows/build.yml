@@ -1,9 +1,13 @@
 name: Build & Publish
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - Tests
     branches:
       - main
+    types:
+      - completed
 
 permissions:
   contents: write
