@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES5",
+    "target": "ES2021",
     "module": "CommonJS",
     "moduleResolution": "Node",
     "outDir": "dist",
@@ -25,8 +25,16 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "useUnknownInCatchVariables": false,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "expressmultithread/router": ["./src/index"],
+      "expressmultithread/types": ["./src/types"],
+      "expressmultithread/decorators": ["./src/decorators"],
+      "expressmultithread/config": ["./src/config"]
+    }
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "examples"]
+  "exclude": ["node_modules", "dist", "examples", "test"]
 }
