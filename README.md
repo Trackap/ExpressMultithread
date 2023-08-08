@@ -96,3 +96,7 @@ Middlewares passed in controller or route args, can't be error middleware, this 
 More examples
 -
 Check [examples folder](https://github.dev/Trackap/ExpressMultithread/tree/main/examples) for more examples
+
+License
+-
+ExpressMultithread is [MIT Licensed](https://github.com/Trackap/ExpressMultithread/blob/main/LICENSE)
