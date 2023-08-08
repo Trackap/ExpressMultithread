@@ -1,7 +1,7 @@
 /* Import express */
 import express from "express";
 /* OPTIONNAL: Set thread count, can be done with env 'THREAD_COUNT' */
-import Config from "../../src/class/Config";
+import Config from "../../src/config";
 Config.threadCount = 2;
 
 /* Import Multithreaded Router*/
