@@ -70,7 +70,7 @@ class Child {
 
     private async handleRequest(req: Request, _id: string) : Promise<void> {
         /* Get internal route name */
-        const k = req.method.toLowerCase() + req.baseUrl + req.path;
+        const k = req.method.toLowerCase() + req.path;
         if (!this.routes[k])
             throw new Error(routeNotFound);
         /* Loop through callstack */

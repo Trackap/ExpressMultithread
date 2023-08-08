@@ -6,7 +6,6 @@ export function cleanRequest(req: Request) : Request {
         params: req.params,
         query: req.query,
         headers: req.headers,
-        baseUrl: req.baseUrl,
         path: req.route.path,
         method: req.method
     } as Request;
