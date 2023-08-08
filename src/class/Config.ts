@@ -7,13 +7,12 @@ import { cleanRequest as __cleanRequest } from "../functions/cleanRequest";
 import { merge } from "../functions/utils/mergeObject";
 
 /* Constants */
-import { invalidThreadCount, tsFile } from "../constants/strings";
+import { invalidThreadCount } from "../constants/strings";
 
 class Config {
     private _orig: (req: Request) => Request = __cleanRequest;
     private _custom: ((req: Request) => Request) | undefined = undefined;
     private _threadCount: number = process.env.THREAD_COUNT === undefined ? cpus().length : parseInt(process.env.THREAD_COUNT);
-    private _ext : string = tsFile;
 
 
     public get threadCount() : number {
@@ -33,14 +32,6 @@ class Config {
     public set cleanRequest(value: ((req: Request) => Request) | undefined) {
         this._custom = value;
     };
-
-    public get ext(): string {
-        return this._ext;
-    };
-
-    public set ext(value: ".ts" | ".js") {
-        this._ext = value;
-    }
 };
 
 const Instance = new Config();
