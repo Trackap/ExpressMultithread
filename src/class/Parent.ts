@@ -68,9 +68,8 @@ class Parent {
             }
         });
         /* Handle child errors */
-        child.on(error, (e: ChildError) => {
-            console.log(e)
-            throw new TSError(e.diagnosticText, e.diagnosticCodes);
+        child.on(error, (e: Error) => {
+            throw e;
         });
         /* Update child sources */
         postChild(child, {
