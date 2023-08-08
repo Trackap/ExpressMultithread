@@ -33,7 +33,7 @@ App.listen(3000, () => console.info("Listening on port 3000"));
 3. Create a controllers directory and create a file 'example.ts' :
 ```ts
 // file example.ts
-import { controller, route } from 'expressmultithread/decorators';
+import { controller, route } from 'expressmultithread/dist/decorators';
 import { Request, Response } from 'express';
 
 @controller
@@ -46,7 +46,7 @@ export class ExampleController {
 ```
 
 Now you can run index.ts and open the following url http://localhost:3000/hello.
-If you had trouble with this example you can see.
+If you had trouble with this example you can see [example ReadMe](https://github.dev/Trackap/ExpressMultithread/tree/main/examples/exampleReadMe).
 
 Too many threads created ?
 You  just have to configure it, it can be done by two ways :
@@ -55,7 +55,7 @@ You  just have to configure it, it can be done by two ways :
 - Set thread count with code :
 ```ts
 // Place this two lines before import Router from 'expressmultithread';
-import Config from 'expressmultithread/config';
+import Config from 'expressmultithread/dist/config';
 Config.threadCount = 2; // Now it will launch only two threads;
 ```
 
@@ -65,9 +65,9 @@ API
 
 ##### Imports:
 ```ts
-import Config from 'expressmultithread/config';
+import Config from 'expressmultithread/dist/config';
 import Router from 'expressmultithread';
-import { router, controller } from 'expressmultithread/decorators';
+import { router, controller } from 'expressmultithread/dist/decorators';
 ```
 
 ##### Prototypes:
