@@ -1,5 +1,6 @@
 /* Modules */
 import { workerData, parentPort, isMainThread } from "worker_threads";
+import { register } from 'ts-node';
 
 /* Functions */
 import { override } from "../functions/overrideConsole";
@@ -14,6 +15,8 @@ import { Request } from "express";
 
 /* Constants */
 import { message, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
+
+register();
 
 const pNext = function (id: number, tid: string, arg: any) : void {
     postParent({
