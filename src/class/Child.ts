@@ -16,7 +16,8 @@ import { Request } from "express";
 /* Constants */
 import { message, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
 
-register();
+/* Register ts-node if were're in compiled version */
+__filename.endsWith(".js") && register();
 
 const pNext = function (id: number, tid: string, arg: any) : void {
     postParent({
