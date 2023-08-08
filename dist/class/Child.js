@@ -9,7 +9,7 @@ const overrideRes_1 = require("../functions/overrideRes");
 const postMessage_1 = require("../functions/utils/postMessage");
 const types_1 = require("../types");
 const strings_1 = require("../constants/strings");
-(0, ts_node_1.register)();
+__filename.endsWith(".js") && (0, ts_node_1.register)();
 const pNext = function (id, tid, arg) {
     (0, postMessage_1.postParent)({
         cmd: types_1.ChildCmd.next,
