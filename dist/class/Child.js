@@ -50,7 +50,7 @@ class Child {
     }
     ;
     async handleRequest(req, _id) {
-        const k = req.method.toLowerCase() + req.baseUrl + req.path;
+        const k = req.method.toLowerCase() + req.path;
         if (!this.routes[k])
             throw new Error(strings_1.routeNotFound);
         (0, callLoop_1.callLoop)(req, (0, overrideRes_1.overrideRes)(this.id, _id), this.routes[k].callstack)
