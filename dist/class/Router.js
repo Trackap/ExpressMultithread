@@ -23,7 +23,6 @@ var defaultPath = process.cwd();
 var MultithreadedRouter = (function () {
     function MultithreadedRouter() {
         this.routes = {};
-        this.sources = [];
         this.middlewares = [];
         this._router = (0, express_1.Router)();
     }
@@ -39,14 +38,6 @@ var MultithreadedRouter = (function () {
             (_a = this._router)[route.method].apply(_a, __spreadArray([route.endpoint], callstack, false));
         }
     };
-    ;
-    Object.defineProperty(MultithreadedRouter.prototype, "_sources", {
-        get: function () {
-            return this.sources;
-        },
-        enumerable: false,
-        configurable: true
-    });
     ;
     Object.defineProperty(MultithreadedRouter.prototype, "router", {
         get: function () {
