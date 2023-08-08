@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const worker_threads_1 = require("worker_threads");
+const ts_node_1 = require("ts-node");
 const overrideConsole_1 = require("../functions/overrideConsole");
 const pathToRoute_1 = require("../functions/pathToRoute");
 const callLoop_1 = require("../functions/callLoop");
@@ -8,6 +9,7 @@ const overrideRes_1 = require("../functions/overrideRes");
 const postMessage_1 = require("../functions/utils/postMessage");
 const types_1 = require("../types");
 const strings_1 = require("../constants/strings");
+(0, ts_node_1.register)();
 const pNext = function (id, tid, arg) {
     (0, postMessage_1.postParent)({
         cmd: types_1.ChildCmd.next,
