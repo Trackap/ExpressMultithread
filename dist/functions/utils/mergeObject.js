@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.merge = void 0;
 function merge(target, source) {
-    var cpy = Object.assign({}, target);
+    const cpy = Object.assign({}, target);
     return Object.assign(cpy, source);
 }
 exports.merge = merge;

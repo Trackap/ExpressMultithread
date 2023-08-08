@@ -1,181 +1,88 @@
 "use strict";
-var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
-    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-        if (ar || !(i in from)) {
-            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-            ar[i] = from[i];
-        }
-    }
-    return to.concat(ar || Array.prototype.slice.call(from));
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.overrideRes = void 0;
-var strings_1 = require("../constants/strings");
-var types_1 = require("../types");
-var postMessage_1 = require("./utils/postMessage");
-var overrideObj = {
+const strings_1 = require("../constants/strings");
+const types_1 = require("../types");
+const postMessage_1 = require("./utils/postMessage");
+const overrideObj = {
     _id: -1,
     _tid: -1,
-    transferCall: function transferCall(call) {
-        var args = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            args[_i - 1] = arguments[_i];
-        }
+    transferCall: function transferCall(call, ...args) {
         (0, postMessage_1.postParent)({
             cmd: types_1.ChildCmd.response,
-            call: call,
-            args: args,
+            call,
+            args,
             id: this._id,
             tid: this._tid
         });
         return this;
     },
-    append: function append() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["append"], args, false));
+    append: function append(...args) {
+        return this.transferCall("append", ...args);
     },
-    attachment: function attachment() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["attachment"], args, false));
+    attachment: function attachment(...args) {
+        return this.transferCall("attachment", ...args);
     },
-    cookie: function cookie() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["cookie"], args, false));
+    cookie: function cookie(...args) {
+        return this.transferCall("cookie", ...args);
     },
-    clearCookie: function clearCookie() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["clearCookie"], args, false));
+    clearCookie: function clearCookie(...args) {
+        return this.transferCall("clearCookie", ...args);
     },
-    download: function download() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["download"], args, false));
+    download: function download(...args) {
+        return this.transferCall("download", ...args);
     },
-    end: function end() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["end"], args, false));
+    end: function end(...args) {
+        return this.transferCall("end", ...args);
     },
-    format: function format() {
-        var _args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            _args[_i] = arguments[_i];
-        }
+    format: function format(..._args) {
         throw new Error(strings_1.notImplemented);
     },
     get: function get() {
         throw new Error(strings_1.notImplemented);
     },
-    json: function json() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["json"], args, false));
+    json: function json(...args) {
+        return this.transferCall("json", ...args);
     },
-    jsonp: function jsonp() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["jsonp"], args, false));
+    jsonp: function jsonp(...args) {
+        return this.transferCall("jsonp", ...args);
     },
-    links: function links() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["links"], args, false));
+    links: function links(...args) {
+        return this.transferCall("links", ...args);
     },
-    location: function location() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["location"], args, false));
+    location: function location(...args) {
+        return this.transferCall("location", ...args);
     },
-    redirect: function redirect() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["redirect"], args, false));
+    redirect: function redirect(...args) {
+        return this.transferCall("redirect", ...args);
     },
-    render: function render() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["render"], args, false));
+    render: function render(...args) {
+        return this.transferCall("render", ...args);
     },
-    send: function send() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["send"], args, false));
+    send: function send(...args) {
+        return this.transferCall("send", ...args);
     },
-    sendFile: function sendFile() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["sendFile"], args, false));
+    sendFile: function sendFile(...args) {
+        return this.transferCall("sendFile", ...args);
     },
-    sendStatus: function sendStatus() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["sendStatus"], args, false));
+    sendStatus: function sendStatus(...args) {
+        return this.transferCall("sendStatus", ...args);
     },
-    set: function set() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["set"], args, false));
+    set: function set(...args) {
+        return this.transferCall("set", ...args);
     },
-    status: function status() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["status"], args, false));
+    status: function status(...args) {
+        return this.transferCall("status", ...args);
     },
-    type: function type() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["type"], args, false));
+    type: function type(...args) {
+        return this.transferCall("type", ...args);
     },
-    vary: function vary() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return this.transferCall.apply(this, __spreadArray(["vary"], args, false));
+    vary: function vary(...args) {
+        return this.transferCall("vary", ...args);
     }
 };
 function overrideRes(_id, _tid) {
-    var obj = Object.create(overrideObj);
+    const obj = Object.create(overrideObj);
     obj._id = _id;
     obj._tid = _tid;
     return obj;

@@ -1,45 +1,35 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var os_1 = require("os");
-var cleanRequest_1 = require("../functions/cleanRequest");
-var mergeObject_1 = require("../functions/utils/mergeObject");
-var strings_1 = require("../constants/strings");
-var Config = (function () {
-    function Config() {
+const os_1 = require("os");
+const cleanRequest_1 = require("../functions/cleanRequest");
+const mergeObject_1 = require("../functions/utils/mergeObject");
+const strings_1 = require("../constants/strings");
+class Config {
+    constructor() {
         this._orig = cleanRequest_1.cleanRequest;
         this._custom = undefined;
         this._threadCount = process.env.THREAD_COUNT === undefined ? (0, os_1.cpus)().length : parseInt(process.env.THREAD_COUNT);
     }
-    Object.defineProperty(Config.prototype, "threadCount", {
-        get: function () {
-            return this._threadCount;
-        },
-        set: function (value) {
-            this._threadCount = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
-    Object.defineProperty(Config.prototype, "cleanRequest", {
-        get: function () {
-            var _this = this;
-            if (this._custom) {
-                return function (req) { return (0, mergeObject_1.merge)(_this._custom(req), _this._orig(req)); };
-            }
-            return this._orig;
-        },
-        set: function (value) {
-            this._custom = value;
-        },
-        enumerable: false,
-        configurable: true
-    });
+    get threadCount() {
+        return this._threadCount;
+    }
+    set threadCount(value) {
+        this._threadCount = value;
+    }
+    get cleanRequest() {
+        if (this._custom) {
+            return (req) => (0, mergeObject_1.merge)(this._custom(req), this._orig(req));
+        }
+        return this._orig;
+    }
     ;
+    set cleanRequest(value) {
+        this._custom = value;
+    }
     ;
-    return Config;
-}());
+}
 ;
-var Instance = new Config();
+const Instance = new Config();
 if (isNaN(Instance.threadCount) || Instance.threadCount < 0)
     throw new Error(strings_1.invalidThreadCount);
 exports.default = Instance;
