@@ -3,9 +3,6 @@ import type { Config } from 'jest';
 const config: Config = {
     verbose: true,
     preset: 'ts-jest',
-    transform:{
-        "^.+\\Child.[t|j]s?$": "workerloader-jest-transformer"
-    },
     testRegex: ".spec.[t|j]s",
     testEnvironment: 'node',
     forceExit: true,
