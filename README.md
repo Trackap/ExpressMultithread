@@ -91,6 +91,8 @@ The object request received in your functions is a light version of the original
 The object response received in your functions is a total override object, it was overrided following the [Express API Documentation 4.x](https://expressjs.com/fr/4x/api.html#res).
 Please note that transferred informations between threads must be serialisable data, res functions calls give content of the call to the main thread it means you can't pass functions in any res methods.
 
+Middlewares passed in controller or route args, can't be error middleware, this is not handled by the multithreadedrouter, despite, you can handle errors with the main thread following the [errorHandling example](https://github.dev/Trackap/ExpressMultithread/tree/main/examples/errorHandling).
+
 More examples
 -
 Check [examples folder](https://github.dev/Trackap/ExpressMultithread/tree/main/examples) for more examples
