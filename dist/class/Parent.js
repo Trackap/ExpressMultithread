@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Instance = void 0;
-const ts_node_1 = require("ts-node");
 const worker_threads_1 = require("worker_threads");
 const crypto_1 = require("crypto");
 const Config_1 = __importDefault(require("./Config"));
@@ -52,8 +51,7 @@ class Parent {
             }
         });
         child.on(strings_1.error, (e) => {
-            console.log(e);
-            throw new ts_node_1.TSError(e.diagnosticText, e.diagnosticCodes);
+            throw e;
         });
         (0, postMessage_1.postChild)(child, {
             cmd: types_1.ParentCmd.addSource,

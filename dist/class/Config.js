@@ -9,6 +9,7 @@ class Config {
         this._orig = cleanRequest_1.cleanRequest;
         this._custom = undefined;
         this._threadCount = process.env.THREAD_COUNT === undefined ? (0, os_1.cpus)().length : parseInt(process.env.THREAD_COUNT);
+        this._ext = strings_1.tsFile;
     }
     get threadCount() {
         return this._threadCount;
@@ -27,6 +28,13 @@ class Config {
         this._custom = value;
     }
     ;
+    get ext() {
+        return this._ext;
+    }
+    ;
+    set ext(value) {
+        this._ext = value;
+    }
 }
 ;
 const Instance = new Config();
