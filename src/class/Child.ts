@@ -100,5 +100,3 @@ class Child {
 if (isMainThread)
     throw new Error(noMain)
 const child = new Child();
-
-export default child;
