@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sleep = void 0;
 function sleep(ms) {
-    return new Promise(function (resolve) { return setTimeout(resolve, ms); });
+    return new Promise((resolve) => setTimeout(resolve, ms));
 }
 exports.sleep = sleep;
 //# sourceMappingURL=sleep.js.map

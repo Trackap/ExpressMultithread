@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postChild = exports.postParent = void 0;
-var worker_threads_1 = require("worker_threads");
-var strings_1 = require("../../constants/strings");
+const worker_threads_1 = require("worker_threads");
+const strings_1 = require("../../constants/strings");
 function postParent(msg) {
     if (worker_threads_1.isMainThread || !worker_threads_1.parentPort)
         throw new Error(strings_1.noMain);
