@@ -128,5 +128,4 @@ var Child = (function () {
 if (worker_threads_1.isMainThread)
     throw new Error(strings_1.noMain);
 var child = new Child();
-exports.default = child;
 //# sourceMappingURL=Child.js.map
