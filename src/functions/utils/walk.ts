@@ -1,8 +1,11 @@
 /* Modules */
 import fs from "fs";
 
+/* Classes */
+import Config from "../../config";
+
 /* Constants */
-import { node_modules, slash, tsFile } from "../../constants/strings";
+import { node_modules, slash } from "../../constants/strings";
 
 export const walk = (dir: string) : string[] => {
     const directories = [dir];
@@ -19,7 +22,7 @@ export const walk = (dir: string) : string[] => {
             if (fs.lstatSync(fullpath).isDirectory())
                 directories.push(fullpath);
             else
-                fullpath.endsWith(tsFile) && ret.push(fullpath);
+                fullpath.endsWith(Config.ext) && ret.push(fullpath);
         }
     }
     return ret;
