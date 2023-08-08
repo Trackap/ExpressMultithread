@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.walk = void 0;
 const fs_1 = __importDefault(require("fs"));
-const config_1 = __importDefault(require("../../config"));
 const strings_1 = require("../../constants/strings");
 const walk = (dir) => {
     const directories = [dir];
@@ -20,7 +19,7 @@ const walk = (dir) => {
             if (fs_1.default.lstatSync(fullpath).isDirectory())
                 directories.push(fullpath);
             else
-                fullpath.endsWith(config_1.default.ext) && ret.push(fullpath);
+                fullpath.endsWith(strings_1.tsFile) && ret.push(fullpath);
         }
     }
     return ret;
