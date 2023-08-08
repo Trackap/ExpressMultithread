@@ -27,7 +27,7 @@ import Router from 'expressmultithread';
 const App = express();
 App.use("/", Router.router);
 Router.importControllers(__dirname + "/controllers");
-App.listen(3000, () => console.info("Listening on port 3000));
+App.listen(3000, () => console.info("Listening on port 3000"));
 ```
 
 3. Create a controllers directory and create a file 'example.ts' :
