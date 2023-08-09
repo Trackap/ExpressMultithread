@@ -5,6 +5,8 @@ export const nl = "\n";
 export const space = " ";
 export const bRight = "[";
 export const bLeft = "]";
+export const cRight = "{";
+export const cLeft = "}";
 
 /* Keys */
 export const defaultStr = "default";
