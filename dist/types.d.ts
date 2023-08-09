@@ -44,3 +44,8 @@ export declare enum ParentCmd {
 export interface Msg<T extends ParentCmd | ChildCmd> {
     cmd: T;
 }
+export interface Import {
+    module: string;
+    path: string;
+    packed: boolean;
+}

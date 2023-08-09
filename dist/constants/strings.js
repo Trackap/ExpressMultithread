@@ -1,12 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.errorConsole = exports.warnConsole = exports.infoConsole = exports.logConsole = exports.FgRed = exports.FgYellow = exports.FgCyan = exports.FgGray = exports.Reset = exports.notImplemented = exports.routeNotFound = exports.invalidThreadCount = exports.unknownCmd = exports.noParentPort = exports.noMain = exports.childNotFound = exports.redefinition = exports.error = exports.message = exports.childFile = exports.node_modules = exports.tsFile = exports.__route = exports.__controller = exports.defaultStr = exports.bLeft = exports.bRight = exports.space = exports.nl = exports.empty = exports.slash = void 0;
+exports.errorConsole = exports.warnConsole = exports.infoConsole = exports.logConsole = exports.FgRed = exports.FgYellow = exports.FgCyan = exports.FgGray = exports.Reset = exports.notImplemented = exports.routeNotFound = exports.invalidThreadCount = exports.unknownCmd = exports.noParentPort = exports.noMain = exports.childNotFound = exports.redefinition = exports.error = exports.message = exports.childFile = exports.node_modules = exports.tsFile = exports.__route = exports.__controller = exports.defaultStr = exports.cLeft = exports.cRight = exports.bLeft = exports.bRight = exports.space = exports.nl = exports.empty = exports.slash = void 0;
 exports.slash = "/";
 exports.empty = "";
 exports.nl = "\n";
 exports.space = " ";
 exports.bRight = "[";
 exports.bLeft = "]";
+exports.cRight = "{";
+exports.cLeft = "}";
 exports.defaultStr = "default";
 exports.__controller = "__controller";
 exports.__route = "__route";
