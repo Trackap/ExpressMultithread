@@ -29,11 +29,8 @@
     "resolveJsonModule": true,
     "baseUrl": ".",
     "paths": {
-      "@em/router": ["./src/"],
-      "@em/router/*": ["./src/*"],
-      "@em/decorators": ["./src/functions/decorators"],
-      "@em/decorators/*": ["./src/functions/decorators/*"],
-      "@em/config": ["./src/config"]
+      "@em": ["./src/"],
+      "@em/*": ["./src/*"]
     }
   },
   "include": ["src/**/*"],
