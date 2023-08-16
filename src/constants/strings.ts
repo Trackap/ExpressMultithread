@@ -8,6 +8,9 @@ export const bLeft = "]";
 export const cRight = "{";
 export const cLeft = "}";
 
+/* Types */
+export const fnStr = "function";
+
 /* Keys */
 export const defaultStr = "default";
 export const __controller = "__controller";
@@ -31,6 +34,7 @@ export const unknownCmd = "Unknown command";
 export const invalidThreadCount = "Invalid thread count";
 export const routeNotFound = "Route not found";
 export const notImplemented = "Not implemented";
+export const noExport = "No default export found in";
 
 /* Console */
 export const Reset = "\x1b[0m"

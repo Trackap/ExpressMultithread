@@ -35,6 +35,16 @@ export class MultithreadedRouter {
         }
     };
 
+    /* Use a global middleware */
+    public use(middleware: string, ...args: Serializable[]): void {
+        Parent!.addMiddleware(middleware, args);
+    };
+
+    /* Unuse a global middleware */
+    public unuse(middleware?: string, ...args: Serializable[]) {
+        Parent!.removeMiddleware(args, middleware);
+    };
+
     /*  Getters */
     public get router() : ExpressRouter {
         return this._router;

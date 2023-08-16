@@ -18,6 +18,11 @@ export type Serializable = string
 
 export interface Constructor { new (...args: any[]): {} };
 
+export interface SerializedMiddleware {
+    path: string;
+    opts: Serializable[];
+};
+
 export type ControllerDecoratorOpts = {
     path?: string;
     middlewares?: (Middleware | Middleware[]);
@@ -55,7 +60,8 @@ export enum ChildCmd {
 
 export enum ParentCmd {
     addSource = 0,
-    request = 1
+    addMiddleware = 1,
+    request = 2
 }
 
 export interface Msg<T extends ParentCmd | ChildCmd>{

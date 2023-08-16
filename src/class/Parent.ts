@@ -1,22 +1,21 @@
 /* Modules */
-import { TSError } from 'ts-node';
 import { Worker, isMainThread } from 'worker_threads';
 import { randomUUID } from 'crypto';
 
 /* Classes */
-import { ChildError } from './ChildError';
 import Config from './Config';
 
 /* Functions */
 import { sleep } from '../functions/utils/sleep';
 
 /* Types */
-import { ChildData, Task, ParentCmd, ChildCmd } from '../types';
+import { ChildData, Task, ParentCmd, ChildCmd, Serializable, SerializedMiddleware } from '../types';
 import { NextFunction, Request, Response } from 'express';
 
 /* Constants */
 import { childFile, childNotFound, error, message, slash, unknownCmd } from '../constants/strings';
 import { postChild } from '../functions/utils/postMessage';
+import { compareArray } from '../functions/utils/compareArray';
 
 class Parent {
     /* List of all childs */
@@ -27,6 +26,8 @@ class Parent {
     private taskQueue: Task[] = [];
     /* Incremental id for childs */
     private inc : number = 0;
+    /* Global Middlewares */
+    private middlewares : SerializedMiddleware[] = [];
 
     constructor(threadCount : number = Config.threadCount) {
         /* Create X childs */
@@ -137,20 +138,63 @@ class Parent {
         /* Add source to sources */
         this.sources.push(...source);
         /* Send new sources to childs */
-        for (let i = 0; i < this.childs.length; i++) {
-            postChild(this.childs[i].instance, {
-                cmd: ParentCmd.addSource,
-                source
-            });
-        }
+        this.postChilds(ParentCmd.addSource, {
+            cmd: ParentCmd.addSource,
+            source
+        });
     };
 
+    public addMiddleware(path: string, opts: Serializable[]) : void {
+        /* Push in middlewares */
+        this.middlewares.push({
+            path,
+            opts
+        });
+        /* Update childs */
+        this.postChilds(ParentCmd.addMiddleware, {
+            middlewares: this.middlewares
+        });
+    };
+
+    public removeMiddleware(opts: Serializable[], path?: string) : void {
+        /* Remove all middlewares if no path */
+        if (!path) {
+            /* Empty array */
+            this.middlewares = [];
+        } else {
+            /* Fetch middleware to remove */
+            for (let i = 0; i < this.middlewares.length; i++) {
+                let m = this.middlewares[i];
+                /* Path match with opts */
+                if (m.path === path && compareArray(m.opts, opts)) {
+                    /* Remove middleware */
+                    this.middlewares.splice(i, 1);
+                    continue;
+                }
+            }
+        }
+        /* Update childs */
+        this.postChilds(ParentCmd.addMiddleware, {
+            middlewares: this.middlewares
+        });
+    };
+
+    /* Close all childs, may cause express trouble */
     public close() : void {
         for (let i = 0; i < this.childs.length; i++) {
             this.childs[i].instance.terminate();
         }
-    }
+    };
 
+    /* Post message on all childs */
+    private postChilds(cmd: ParentCmd, data: any) : void {
+        data.cmd = cmd;
+        for (let i = 0; i < this.childs.length; i++) {
+            postChild(this.childs[i].instance, data);
+        }
+    };
+
+    /* Getters */
     public get sourcesList() : string[] {
         return this.sources;
     };

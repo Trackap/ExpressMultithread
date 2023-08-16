@@ -10,11 +10,12 @@ import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 
 /* Types */
-import { ParentCmd, ChildCmd, InternalRoute, Serializable } from "../types";
+import { ParentCmd, ChildCmd, InternalRoute, Serializable, Middleware, SerializedMiddleware } from "../types";
 import { Request } from "express";
 
 /* Constants */
-import { message, nl, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
+import { fnStr, message, nl, noExport, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
+import { importModule } from "../functions/utils/importModule";
 
 /* Register ts-node if were're in compiled version */
 __filename.endsWith(".js") && register();
@@ -29,8 +30,12 @@ const pNext = function (id: number, tid: string, arg: Serializable) : void {
 };
 
 class Child {
+    /* Id of child */
     private id : number;
+    /* All routes */
     private routes : Record<string, InternalRoute> = {};
+    /* Global middlewares */
+    private middlewares : Middleware[] = [];
 
     constructor() {
         /* Set id */
@@ -53,6 +58,9 @@ class Child {
                 case ParentCmd.addSource:
                     this.addSource(parsed.source);
                     break;
+                case ParentCmd.addMiddleware:
+                    this.setMiddlewares(parsed.middlewares);
+                    break;
                 case ParentCmd.request:
                     this.handleRequest(parsed.req, parsed.id);
                     break;
@@ -74,7 +82,7 @@ class Child {
         if (!this.routes[k])
             throw new Error(routeNotFound);
         /* Loop through callstack */
-        callLoop(req, overrideRes(this.id, _id), this.routes[k].callstack!)
+        callLoop(req, overrideRes(this.id, _id), this.middlewares.concat(this.routes[k].callstack!))
             /* Handle next() */
             .then((res?: "route" | "router") => {
                 switch (res) {
@@ -98,6 +106,18 @@ class Child {
     private addSource(source: string[]) : void {
         /* Merge new routes with old one */
         Object.assign(this.routes, pathToRoute(source));
+    };
+
+    private setMiddlewares(newMiddlewares : SerializedMiddleware[]) : void {
+        this.middlewares = [];
+        for (let i = 0; i < newMiddlewares.length; i++) {
+            const { path, opts } = newMiddlewares[i];
+            const module = importModule(path);
+            const cb = module.default;
+            if (!cb || typeof cb !== fnStr)
+                throw new Error(noExport + path);
+            this.middlewares.push(opts && opts.length ? cb(...opts) : cb);
+        }
     };
 };
 
