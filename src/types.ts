@@ -8,6 +8,14 @@ export type Callback = (req: Request, res: Response) => (any | Promise<any>);
 
 export type Middleware = (req: Request, res: Response, next: NextFunction) => (any | Promise<any>);
 
+export type Serializable = string
+| number
+| boolean
+| bigint
+| undefined
+| {[key: string]: Serializable}
+| Serializable[];
+
 export interface Constructor { new (...args: any[]): {} };
 
 export type ControllerDecoratorOpts = {

@@ -10,16 +10,16 @@ import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 
 /* Types */
-import { ParentCmd, ChildCmd, InternalRoute } from "../types";
+import { ParentCmd, ChildCmd, InternalRoute, Serializable } from "../types";
 import { Request } from "express";
 
 /* Constants */
-import { message, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
+import { message, nl, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
 
 /* Register ts-node if were're in compiled version */
 __filename.endsWith(".js") && register();
 
-const pNext = function (id: number, tid: string, arg: any) : void {
+const pNext = function (id: number, tid: string, arg: Serializable) : void {
     postParent({
         cmd: ChildCmd.next,
         id,
@@ -91,7 +91,7 @@ class Child {
             })
             /* Handle errors */
             .catch((e: Error) => {
-                pNext(this.id, _id, e);
+                pNext(this.id, _id, e.message + nl + e.stack);
             });
     };
 

@@ -3,13 +3,13 @@ import { Response } from "express";
 
 /* Constants */
 import { notImplemented } from "../constants/strings";
-import { ChildCmd } from "../types";
+import { ChildCmd, Serializable } from "../types";
 import { postParent } from "./utils/postMessage";
 
 const overrideObj = {
     _id: -1,
     _tid: -1,
-    transferCall: function transferCall(call: string, ...args: any[]) {
+    transferCall: function transferCall(call: string, ...args: Serializable[]) {
         postParent({
             cmd: ChildCmd.response,
             call,
@@ -20,67 +20,67 @@ const overrideObj = {
         return this as any as Response;
     },
     
-    append: function append(...args: any[]) {
+    append: function append(...args: Serializable[]) {
         return this.transferCall("append", ...args);
     },
-    attachment: function attachment(...args: any[]) {
+    attachment: function attachment(...args: Serializable[]) {
         return this.transferCall("attachment", ...args);
     },
-    cookie: function cookie(...args: any[]) {
+    cookie: function cookie(...args: Serializable[]) {
         return this.transferCall("cookie", ...args);
     },
-    clearCookie: function clearCookie(...args: any[]) {
+    clearCookie: function clearCookie(...args: Serializable[]) {
         return this.transferCall("clearCookie", ...args);
     },
-    download: function download(...args: any[]) {// WARNING CALLBACK
+    download: function download(...args: Serializable[]) {// WARNING CALLBACK
         return this.transferCall("download", ...args);
     },
-    end: function end(...args: any[]) {
+    end: function end(...args: Serializable[]) {
         return this.transferCall("end", ...args);
     },
-    format: function format(..._args: any[]) {
+    format: function format(..._args: Serializable[]) {
         throw new Error(notImplemented);
     },
     get: function get() {
         throw new Error(notImplemented);
     },
-    json: function json(...args: any[]) {
+    json: function json(...args: Serializable[]) {
         return this.transferCall("json", ...args);
     },
-    jsonp: function jsonp(...args: any[]) {
+    jsonp: function jsonp(...args: Serializable[]) {
         return this.transferCall("jsonp", ...args);
     },
-    links: function links(...args: any[]) {
+    links: function links(...args: Serializable[]) {
         return this.transferCall("links", ...args);
     },
-    location: function location(...args: any[]) {
+    location: function location(...args: Serializable[]) {
         return this.transferCall("location", ...args);
     },
-    redirect: function redirect(...args: any[]) {
+    redirect: function redirect(...args: Serializable[]) {
         return this.transferCall("redirect", ...args);
     },
-    render: function render(...args: any[]) {// WARNING CALLBACK
+    render: function render(...args: Serializable[]) {// WARNING CALLBACK
         return this.transferCall("render", ...args);
     },
-    send: function send(...args: any[]) {
+    send: function send(...args: Serializable[]) {
         return this.transferCall("send", ...args);
     },
-    sendFile: function sendFile(...args: any[]) {// WARNING CALLBACK
+    sendFile: function sendFile(...args: Serializable[]) {// WARNING CALLBACK
         return this.transferCall("sendFile", ...args);
     },
-    sendStatus: function sendStatus(...args: any[]) {
+    sendStatus: function sendStatus(...args: Serializable[]) {
         return this.transferCall("sendStatus", ...args);
     },
-    set: function set(...args: any[]) {
+    set: function set(...args: Serializable[]) {
         return this.transferCall("set", ...args);
     },
-    status: function status(...args: any[]) {
+    status: function status(...args: Serializable[]) {
         return this.transferCall("status", ...args);
     },
-    type: function type(...args: any[]) {
+    type: function type(...args: Serializable[]) {
         return this.transferCall("type", ...args);
     },
-    vary: function vary(...args: any[]) {
+    vary: function vary(...args: Serializable[]) {
         return this.transferCall("vary", ...args);
     }
 };

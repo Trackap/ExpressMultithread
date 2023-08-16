@@ -10,7 +10,7 @@ import { pathToRoute } from '../functions/pathToRoute';
 import { toArray } from '../functions/utils/toArray';
 
 /* Types */
-import { InternalRoute, Middleware } from '../types';
+import { InternalRoute, Serializable } from '../types';
 
 /* Constants */
 import { __route } from '../constants/strings';
@@ -18,13 +18,10 @@ import { wrapRequest } from '../functions/wrap';
 const defaultPath = process.cwd();
 
 export class MultithreadedRouter {
-    /* List of all routes */
-    public routes: Record<string, InternalRoute> = {};
-    /* Middlewares */
-    protected middlewares: Middleware[] = [];
     /* Express Router */
     protected _router : ExpressRouter = ExpressRouter();
 
+    /* Import new controllers */
     public importControllers(path: string | string[] = defaultPath) : void {
         Parent!.addSource(toArray(path));
         const routes : Record<string, InternalRoute> = pathToRoute(path);
