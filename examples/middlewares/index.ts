@@ -10,10 +10,9 @@ import Multithreaded from "../../src/index";
 /* Create express app */
 const App = express();
 
-/* Global middleware, which runs on MainThread */
-App.use([
-    express.json()
-]);
+/* Global middlewares, which runs on child thread */
+Multithreaded.use(__dirname + "/expressJson.ts");
+Multithreaded.use(__dirname + "/withArgs.ts", "Hello World !");
 
 /* Import controllers which run on child threads */
 Multithreaded.importControllers(__dirname + "/controllers");
