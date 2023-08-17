@@ -41,7 +41,7 @@ export class MultithreadedRouter {
     };
 
     /* Unuse a global middleware */
-    public unuse(middleware?: string, ...args: Serializable[]) {
+    public unuse(middleware?: string, ...args: Serializable[]) : void {
         Parent!.removeMiddleware(args, middleware);
     };
 
