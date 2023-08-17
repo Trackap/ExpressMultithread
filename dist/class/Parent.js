@@ -18,7 +18,7 @@ class Parent {
         this.sources = [];
         this.taskQueue = [];
         this.inc = 0;
-        this.middlewares = [];
+        this._middlewares = [];
         for (let i = 0; i < threadCount; i++) {
             this.newChild();
         }
@@ -58,6 +58,10 @@ class Parent {
         (0, postMessage_1.postChild)(child, {
             cmd: types_1.ParentCmd.addSource,
             source: this.sources
+        });
+        (0, postMessage_1.postChild)(child, {
+            cmd: types_1.ParentCmd.addMiddleware,
+            middlewares: this.middlewares
         });
         this.childs.push({
             id: this.inc,
@@ -126,7 +130,7 @@ class Parent {
     ;
     removeMiddleware(opts, path) {
         if (!path) {
-            this.middlewares = [];
+            this._middlewares = [];
         }
         else {
             for (let i = 0; i < this.middlewares.length; i++) {
@@ -159,6 +163,9 @@ class Parent {
         return this.sources;
     }
     ;
+    get middlewares() {
+        return this._middlewares;
+    }
 }
 ;
 exports.Instance = worker_threads_1.isMainThread ? new Parent() : null;

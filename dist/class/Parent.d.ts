@@ -1,11 +1,11 @@
-import { Serializable } from '../types';
+import { Serializable, SerializedMiddleware } from '../types';
 import { NextFunction, Request, Response } from 'express';
 declare class Parent {
     private childs;
     private sources;
     private taskQueue;
     private inc;
-    private middlewares;
+    private _middlewares;
     constructor(threadCount?: number);
     private newChild;
     run(): Promise<void>;
@@ -17,6 +17,7 @@ declare class Parent {
     close(): void;
     private postChilds;
     get sourcesList(): string[];
+    get middlewares(): SerializedMiddleware[];
 }
 export declare const Instance: Parent | null;
 export default Instance;
