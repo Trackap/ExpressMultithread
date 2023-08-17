@@ -8,7 +8,7 @@ Installation
 This project require typescript and express.
 
 ```shell
-    npm i expressmultithread
+npm i expressmultithread
 ```
 
 Usage
@@ -71,18 +71,20 @@ import { router, controller } from 'expressmultithread/dist/decorators';
 ```
 
 ##### Prototypes:
-Config (Object):
- - threadCount (property): Desired number of thread to launch (type: number);
- - cleanRequest (property): Clean request function (type: (req: Request) => Request);
+###### Config (Object):
 
-Router (Object):
- - routes (property): Object containing all finded routes (type: Record<string, InternalRoutes>)
- - router (property): ExpressRouter to use. (type: ExpressRouter)
- - importControllers (method): Define directory to fetch routes ((path: string | string[]) => void)
- 
-Decorators :
- - route (function): (method: RouteMethod, path: string, ...middlewares: Middlewares[]) => any
- - controller (function): <T extends constructor>(opts?: {path?: string, middlewares?: Middlewares[]}) => T
+`Properties :`
+ - threadCount (property): Desired number of thread to launch (type: `number`);
+ - cleanRequest (property): Clean request function (type: `(req: Request) => Request`);
+
+###### Router (Object):
+`Properties :`
+ - router (property): ExpressRouter to use. (type: `ExpressRouter`)
+
+`Methods :`
+ - importControllers (method): Define directory to fetch routes (type: `(path: string | string[]) => void`)
+ - use (method): Use a middleware on all routes (type: `(path: string, ...args: Serializable[]) => void`)
+ - unuse (method): Unuse a middleware or remove all used middlewares (type: `(middleware?: string, ...args: Serializable[]) => void`)
 
 Usefull informations
 -
