@@ -13,7 +13,8 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && tsc",
     "test": "jest --config jest.config.ts",
-    "publish": "npm run test && npm run build && npm version && npm publish && npm run clean"
+    "pre-publish": "npm run test && npm run build && npm version patch",
+    "publish": "git push && npm publish && npm run clean"
   },
   "repository": {
     "type": "git",
