@@ -4,7 +4,6 @@ import { expect } from 'chai';
 // import { merge } from '../src/functions/utils/mergeObject';
 
 const defObj = {
-    baseUrl: undefined,
     body: undefined,
     headers: undefined,
     method: undefined,
