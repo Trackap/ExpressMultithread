@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParentCmd = exports.ChildCmd = void 0;
 ;
+;
 var ChildCmd;
 (function (ChildCmd) {
     ChildCmd[ChildCmd["ready"] = 0] = "ready";
@@ -11,6 +12,7 @@ var ChildCmd;
 var ParentCmd;
 (function (ParentCmd) {
     ParentCmd[ParentCmd["addSource"] = 0] = "addSource";
-    ParentCmd[ParentCmd["request"] = 1] = "request";
+    ParentCmd[ParentCmd["addMiddleware"] = 1] = "addMiddleware";
+    ParentCmd[ParentCmd["request"] = 2] = "request";
 })(ParentCmd || (exports.ParentCmd = ParentCmd = {}));
 //# sourceMappingURL=types.js.map

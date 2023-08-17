@@ -11,12 +11,14 @@ const sleep_1 = require("../functions/utils/sleep");
 const types_1 = require("../types");
 const strings_1 = require("../constants/strings");
 const postMessage_1 = require("../functions/utils/postMessage");
+const compareArray_1 = require("../functions/utils/compareArray");
 class Parent {
     constructor(threadCount = Config_1.default.threadCount) {
         this.childs = [];
         this.sources = [];
         this.taskQueue = [];
         this.inc = 0;
+        this.middlewares = [];
         for (let i = 0; i < threadCount; i++) {
             this.newChild();
         }
@@ -106,12 +108,38 @@ class Parent {
     ;
     addSource(source) {
         this.sources.push(...source);
-        for (let i = 0; i < this.childs.length; i++) {
-            (0, postMessage_1.postChild)(this.childs[i].instance, {
-                cmd: types_1.ParentCmd.addSource,
-                source
-            });
+        this.postChilds(types_1.ParentCmd.addSource, {
+            cmd: types_1.ParentCmd.addSource,
+            source
+        });
+    }
+    ;
+    addMiddleware(path, opts) {
+        this.middlewares.push({
+            path,
+            opts
+        });
+        this.postChilds(types_1.ParentCmd.addMiddleware, {
+            middlewares: this.middlewares
+        });
+    }
+    ;
+    removeMiddleware(opts, path) {
+        if (!path) {
+            this.middlewares = [];
         }
+        else {
+            for (let i = 0; i < this.middlewares.length; i++) {
+                let m = this.middlewares[i];
+                if (m.path === path && (0, compareArray_1.compareArray)(m.opts, opts)) {
+                    this.middlewares.splice(i, 1);
+                    continue;
+                }
+            }
+        }
+        this.postChilds(types_1.ParentCmd.addMiddleware, {
+            middlewares: this.middlewares
+        });
     }
     ;
     close() {
@@ -119,6 +147,14 @@ class Parent {
             this.childs[i].instance.terminate();
         }
     }
+    ;
+    postChilds(cmd, data) {
+        data.cmd = cmd;
+        for (let i = 0; i < this.childs.length; i++) {
+            (0, postMessage_1.postChild)(this.childs[i].instance, data);
+        }
+    }
+    ;
     get sourcesList() {
         return this.sources;
     }

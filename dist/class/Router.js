@@ -13,8 +13,6 @@ const wrap_1 = require("../functions/wrap");
 const defaultPath = process.cwd();
 class MultithreadedRouter {
     constructor() {
-        this.routes = {};
-        this.middlewares = [];
         this._router = (0, express_1.Router)();
     }
     importControllers(path = defaultPath) {
@@ -26,6 +24,14 @@ class MultithreadedRouter {
             const callstack = Config_1.default.threadCount > 0 ? [(0, wrap_1.wrapRequest)(endpoints[i])] : route.callstack;
             this._router[route.method](route.endpoint, ...callstack);
         }
+    }
+    ;
+    use(middleware, ...args) {
+        Parent_1.default.addMiddleware(middleware, args);
+    }
+    ;
+    unuse(middleware, ...args) {
+        Parent_1.default.removeMiddleware(args, middleware);
     }
     ;
     get router() {

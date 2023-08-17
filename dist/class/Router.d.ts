@@ -1,10 +1,10 @@
 import { Router as ExpressRouter } from 'express';
-import { InternalRoute, Middleware } from '../types';
+import { Serializable } from '../types';
 export declare class MultithreadedRouter {
-    routes: Record<string, InternalRoute>;
-    protected middlewares: Middleware[];
     protected _router: ExpressRouter;
     importControllers(path?: string | string[]): void;
+    use(middleware: string, ...args: Serializable[]): void;
+    unuse(middleware?: string, ...args: Serializable[]): void;
     get router(): ExpressRouter;
 }
 export declare const Multithreaded: MultithreadedRouter;

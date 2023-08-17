@@ -4,8 +4,15 @@ import { Worker } from "worker_threads";
 export type RouteMethod = "get" | "post" | "put" | "delete" | "patch" | "head" | "options";
 export type Callback = (req: Request, res: Response) => (any | Promise<any>);
 export type Middleware = (req: Request, res: Response, next: NextFunction) => (any | Promise<any>);
+export type Serializable = string | number | boolean | bigint | undefined | {
+    [key: string]: Serializable;
+} | Serializable[];
 export interface Constructor {
     new (...args: any[]): {};
+}
+export interface SerializedMiddleware {
+    path: string;
+    opts: Serializable[];
 }
 export type ControllerDecoratorOpts = {
     path?: string;
@@ -39,7 +46,8 @@ export declare enum ChildCmd {
 }
 export declare enum ParentCmd {
     addSource = 0,
-    request = 1
+    addMiddleware = 1,
+    request = 2
 }
 export interface Msg<T extends ParentCmd | ChildCmd> {
     cmd: T;
