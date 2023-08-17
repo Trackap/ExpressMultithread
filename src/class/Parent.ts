@@ -54,15 +54,22 @@ class Parent {
             /* Handle cmds */
             switch (parsed.cmd) {
                 case ChildCmd.ready: 
+                    /* set child as ready */
                     i.ready = true;
                     break;
                 case ChildCmd.response:
+                    /* Get response */
                     let res = i.tasks.find((t) => t.id === parsed.tid)?.res;
+                    /* Send response */
                     res && (res as any)[parsed.call](...parsed.args);
                     break;
                 case ChildCmd.next:
+                    /* Get task index */
                     let index = i.tasks.findIndex((t) => t.id === parsed.tid);
-                    index !== -1 && i.tasks.splice(index, 1).at(0)?.next(parsed.arg);
+                    /* Remove task && get next */
+                    let next = (index !== -1 && i.tasks.splice(index, 1).at(0)?.next);
+                    /* Call next if args are provided */
+                    parsed.arg !== undefined && next && next(parsed.arg);
                     break;
                 default:
                     throw new Error(unknownCmd);
