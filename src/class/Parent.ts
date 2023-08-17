@@ -77,6 +77,11 @@ class Parent {
             cmd: ParentCmd.addSource,
             source: this.sources
         });
+        /* Update child middlewares */
+        postChild(child, {
+            cmd: ParentCmd.addMiddleware,
+            middlewares: this.middlewares
+        });
         /* Save child */
         this.childs.push({
             id: this.inc,
