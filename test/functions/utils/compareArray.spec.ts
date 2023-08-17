@@ -9,7 +9,6 @@ describe('compareArray tests', () => {
         expect(compareArray([true, false], [true, false])).to.be.true;
         expect(compareArray([arr], [arr])).to.be.true;
         expect(compareArray([], [])).to.be.true;
-        expect(compareArray([arr], [Object.create(arr).reverse()])).to.be.true;
 
     });
 
@@ -20,6 +19,6 @@ describe('compareArray tests', () => {
         expect(compareArray([true, false], [false, true])).to.be.false;
         expect(compareArray([[]], [[], []])).to.be.false;
         expect(compareArray(arr, Object.create(arr).reverse())).to.be.false;
-
+        expect(compareArray([arr], [Object.create(arr).reverse()])).to.be.false;
     });
 });

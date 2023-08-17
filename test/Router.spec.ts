@@ -26,6 +26,30 @@ describe('Router tests', () => {
         });
     });
 
+    describe('.use tests', () => {
+        const path = __dirname + "/samples/middlewares/withArgs.ts";
+        const example = "ExampleHeader";
+        expect(Parent?.middlewares.length).to.be.equal(0);
+        Multithreaded.use(path, example);
+        expect(Parent?.middlewares.length).to.be.equal(1);
+        expect(Parent?.middlewares[0].path).to.be.equal(path);
+        expect(Parent?.middlewares[0].opts).to.be.deep.equal([example]);
+    });
+
+    describe('.unuse tests', () => {
+        expect(Parent?.middlewares.length).to.be.equal(1);
+        const path = __dirname + "/samples/middlewares/expressJson.ts";
+        Multithreaded.use(path);
+        expect(Parent?.middlewares.length).to.be.equal(2);
+        Multithreaded.unuse(path);
+        expect(Parent?.middlewares.length).to.be.equal(1);
+        expect(Parent?.middlewares.findIndex((m) => m.path === path)).to.be.equal(-1);
+        Multithreaded.use(path);
+        expect(Parent?.middlewares.length).to.be.equal(2);
+        Multithreaded.unuse();
+        expect(Parent?.middlewares.length).to.be.equal(0);
+    })
+
     describe('Test route', () => {
         it("should return 200", (done) => {
             request(App)

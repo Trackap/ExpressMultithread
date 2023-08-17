@@ -5,7 +5,7 @@ describe('walk tests', () => {
     it("should find 2 files", () => {
         const files = walk(`${__dirname}/../../samples`);
         expect(Array.isArray(files)).to.equal(true);
-        expect(files.length).to.equal(2);
+        expect(files.length).to.equal(5);
         for (const file of files) {
             expect(file).to.be.a("string");
             expect(file).to.match(/.*\.ts$/);
