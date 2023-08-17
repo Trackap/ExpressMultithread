@@ -27,7 +27,7 @@ class Parent {
     /* Incremental id for childs */
     private inc : number = 0;
     /* Global Middlewares */
-    private middlewares : SerializedMiddleware[] = [];
+    private _middlewares : SerializedMiddleware[] = [];
 
     constructor(threadCount : number = Config.threadCount) {
         /* Create X childs */
@@ -165,7 +165,7 @@ class Parent {
         /* Remove all middlewares if no path */
         if (!path) {
             /* Empty array */
-            this.middlewares = [];
+            this._middlewares = [];
         } else {
             /* Fetch middleware to remove */
             for (let i = 0; i < this.middlewares.length; i++) {
@@ -203,6 +203,9 @@ class Parent {
     public get sourcesList() : string[] {
         return this.sources;
     };
+    public get middlewares() : SerializedMiddleware[] {
+        return this._middlewares;
+    }
 };
 
 export const Instance = isMainThread ? new Parent() : null;
