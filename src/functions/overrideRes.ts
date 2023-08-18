@@ -74,8 +74,11 @@ const overrideObj = {
     set: function set(...args: Serializable[]) {
         return this.transferCall("set", ...args);
     },
-    setHeader: function set(...args: Serializable[]) {
+    setHeader: function setHeader(...args: Serializable[]) {
         return this.transferCall("setHeader", ...args);
+    },
+    removeHeader: function removeHeader(...args: Serializable[]) {
+        return this.transferCall("removeHeader", ...args);
     },
     status: function status(...args: Serializable[]) {
         return this.transferCall("status", ...args);
