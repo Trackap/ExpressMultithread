@@ -1,5 +1,6 @@
 /* Modules */
 import fs from "fs";
+import { extname } from "path";
 
 /* Constants */
 import { node_modules, slash, tsFile } from "../../constants/strings";
@@ -19,7 +20,7 @@ export const walk = (dir: string) : string[] => {
             if (fs.lstatSync(fullpath).isDirectory())
                 directories.push(fullpath);
             else
-                fullpath.endsWith(tsFile) && ret.push(fullpath);
+                extname(fullpath) === tsFile && ret.push(fullpath);
         }
     }
     return ret;
