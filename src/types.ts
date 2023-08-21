@@ -81,7 +81,7 @@ export enum PluginType {
     routeDecorator = 1
 };
 
-interface PluginBase {
+export interface PluginBase {
     __id: string;
     kind: PluginType;
     cb: Function;
