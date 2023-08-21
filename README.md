@@ -26,7 +26,7 @@ import Router from 'expressmultithread';
 // file index.ts
 const App = express();
 App.use("/", Router.router);
-Router.importControllers(__dirname + "/controllers");
+Router.importControllers("./controllers");
 App.listen(3000, () => console.info("Listening on port 3000"));
 ```
 
@@ -52,11 +52,14 @@ Too many threads created ?
 You  just have to configure it, it can be done by two ways :
 
 - Set THREAD_COUNT variable in your env, (check [cross-env](https://www.npmjs.com/package/cross-env))
-- Set thread count with code :
+- Set thread count with a config file :
 ```ts
-// Place this two lines before import Router from 'expressmultithread';
-import Config from 'expressmultithread/dist/config';
-Config.threadCount = 2; // Now it will launch only two threads;
+// Place this content inside a file called em.config.ts a the root of your project
+import { BaseConfig } from "expressmultithread/dist/types";
+const config : BaseConfig = {
+    threadCount: 2 // Can be done with env variable THREAD_COUNT=2
+};
+export default config;
 ```
 
 
@@ -65,9 +68,10 @@ API
 
 ##### Imports:
 ```ts
-import Config from 'expressmultithread/dist/config';
 import Router from 'expressmultithread';
 import { router, controller } from 'expressmultithread/dist/decorators';
+import { ... } from 'expressmultithread/dist/types';
+import Config from 'exressmultithread/dist/config';
 ```
 
 ##### Prototypes:
@@ -75,7 +79,8 @@ import { router, controller } from 'expressmultithread/dist/decorators';
 
 `Properties :`
  - threadCount (property): Desired number of thread to launch (type: `number`);
- - cleanRequest (property): Clean request function (type: `(req: Request) => Request`);
+ - plugins (property): Array of path to plugin file (type: `string[]`);
+ - cleanRequest (method): Clean request function (type: `(req: Request) => Request`);
 
 ###### Router (Object):
 `Properties :`
