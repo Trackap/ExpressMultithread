@@ -1,8 +1,8 @@
-export const importModule = (path : string) : any => {
+export const importModule = (path : string, debug: boolean = true) : any => {
     try {
         return require(path);
     } catch (e) {
-        console.error(e);
+        debug && console.error(e);
         return {};
     }
 }
