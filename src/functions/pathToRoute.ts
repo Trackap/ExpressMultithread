@@ -34,9 +34,10 @@ function exploreController(module : any) : Record<string, InternalRoute> | undef
         if (!keys[i].endsWith(__route)) continue;
         /* Register route with corresponding middlewares */
         const route = methods[keys[i]].value as InternalRoute;
+        const propertyKey = keys[i].slice(0, -__route.length);
         /* Iterate on route plugins */
         for (let j = 0; j < rtPlugins.length; j++)
-            rtPlugins[j].cb(route, ogopd(module.prototype));
+            rtPlugins[j].cb(route, propertyKey, ogopd(module.prototype));
         /* Full endpoint path */
         const endpoint = (controller.path ?? empty) + route.path;
         const controllerMid = toArray(controller.middlewares ?? []);

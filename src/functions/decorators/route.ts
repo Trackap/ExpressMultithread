@@ -8,5 +8,5 @@ export function route(method: RouteMethod, path: string, ...middlewares: Middlew
     return (target: any, propertyKey: string) => {
         Object.defineProperty(target, propertyKey + __route, {value: {method, path, middlewares, cb: target[propertyKey]}});
         return target;
-    }
-}
+    };
+};
