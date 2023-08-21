@@ -20,6 +20,7 @@ export const __route = "__route";
 export const tsFile = ".ts";
 export const node_modules = "node_modules";
 export const childFile = "Child.js";
+export const cfgFile = "em.config.ts";
 
 /* Workers */
 export const message = "message";
