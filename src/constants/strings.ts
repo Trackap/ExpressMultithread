@@ -36,6 +36,7 @@ export const invalidThreadCount = "Invalid thread count";
 export const routeNotFound = "Route not found";
 export const notImplemented = "Not implemented";
 export const noExport = "No default export found in";
+export const invalidPlugin = "Invalid plugin";
 
 /* Console */
 export const Reset = "\x1b[0m"
