@@ -2,9 +2,6 @@
 import { Worker, isMainThread } from 'worker_threads';
 import { randomUUID } from 'crypto';
 
-/* Classes */
-import Config from './Config';
-
 /* Functions */
 import { sleep } from '../functions/utils/sleep';
 
@@ -13,6 +10,7 @@ import { ChildData, Task, ParentCmd, ChildCmd, Serializable, SerializedMiddlewar
 import { NextFunction, Request, Response } from 'express';
 
 /* Constants */
+import Config from '../config';
 import { childFile, childNotFound, error, message, slash, unknownCmd } from '../constants/strings';
 import { postChild } from '../functions/utils/postMessage';
 import { compareArray } from '../functions/utils/compareArray';
@@ -212,7 +210,7 @@ class Parent {
     };
     public get middlewares() : SerializedMiddleware[] {
         return this._middlewares;
-    }
+    };
 };
 
 export const Instance = isMainThread ? new Parent() : null;

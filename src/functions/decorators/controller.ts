@@ -16,5 +16,5 @@ export function controller(opts?: ControllerDecoratorOpts) {
     return <T extends { new (...args: any[]): {} }>(target: T) => {
         Object.defineProperty(target, __controller, {value: opts});
         return target;
-    }
-}
+    };
+};

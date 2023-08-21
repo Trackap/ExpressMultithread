@@ -2,7 +2,6 @@
 import { Router as ExpressRouter } from 'express';
 
 /* Classes */
-import Config from './Config';
 import Parent from './Parent';
 
 /* Functions */
@@ -13,6 +12,7 @@ import { toArray } from '../functions/utils/toArray';
 import { InternalRoute, Serializable } from '../types';
 
 /* Constants */
+import Config from '../constants/config';
 import { __route } from '../constants/strings';
 import { wrapRequest } from '../functions/wrap';
 const defaultPath = process.cwd();
@@ -36,13 +36,13 @@ export class MultithreadedRouter {
     };
 
     /* Use a global middleware */
-    public use(middleware: string, ...args: Serializable[]): void {
-        Parent!.addMiddleware(middleware, args);
+    public use(path: string, ...args: Serializable[]): void {
+        Parent!.addMiddleware(path, args);
     };
 
     /* Unuse a global middleware */
-    public unuse(middleware?: string, ...args: Serializable[]) : void {
-        Parent!.removeMiddleware(args, middleware);
+    public unuse(path?: string, ...args: Serializable[]) : void {
+        Parent!.removeMiddleware(args, path);
     };
 
     /*  Getters */

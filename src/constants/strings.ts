@@ -20,6 +20,7 @@ export const __route = "__route";
 export const tsFile = ".ts";
 export const node_modules = "node_modules";
 export const childFile = "Child.js";
+export const cfgFile = "em.config.ts";
 
 /* Workers */
 export const message = "message";
@@ -35,6 +36,7 @@ export const invalidThreadCount = "Invalid thread count";
 export const routeNotFound = "Route not found";
 export const notImplemented = "Not implemented";
 export const noExport = "No default export found in";
+export const invalidPlugin = "Invalid plugin";
 
 /* Console */
 export const Reset = "\x1b[0m"

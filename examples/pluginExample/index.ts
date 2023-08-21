@@ -7,11 +7,7 @@ import Multithreaded from "../../src/index";
 /* Create express app */
 const App = express();
 
-/* Global middlewares, which runs on child thread */
-Multithreaded.use("./expressJson.ts");
-Multithreaded.use("./withArgs.ts", "Hello World !");
-
-/* Import controllers which run on child threads */
+/* Import controllers with a directory, will walk recursively on it and import all controllers & methods */
 Multithreaded.importControllers("./controllers");
 
 /* Use Multithreaded router */

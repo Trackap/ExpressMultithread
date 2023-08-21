@@ -1,8 +1,5 @@
 /* Import express */
 import express from "express";
-/* OPTIONNAL: Set thread count, can be done with env 'THREAD_COUNT' */
-import Config from "../../src/config";
-Config.threadCount = 2;
 
 /* Import Multithreaded Router*/
 import Multithreaded from "../../src/index";
@@ -15,12 +12,12 @@ App.get("/main", (_req: any, res: any, _next: any) => {
 });
 
 /* Import controllers with a directory, will walk recursively on it and import all controllers & methods */
-Multithreaded.importControllers(__dirname + "/controllers");
+Multithreaded.importControllers("./controllers");
 
 /* Use Multithreaded router */
 App.use("/", Multithreaded.router);
 
 /* Start listening */
 App.listen(3050, () => {
-    console.info("Listening")
+    console.info("Listening on http://localhost:3050");
 });
