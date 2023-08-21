@@ -1,8 +1,5 @@
 /* Import express */
 import express, { Request, Response, NextFunction } from "express";
-/* OPTIONNAL: Set thread count, can be done with env 'THREAD_COUNT' */
-import Config from "../../src/config";
-Config.threadCount = 2;
 
 /* Import Multithreaded Router*/
 import Multithreaded from "../../src/index";
@@ -11,7 +8,7 @@ import Multithreaded from "../../src/index";
 const App = express();
 
 /* Import controllers which run on child threads */
-Multithreaded.importControllers(__dirname + "/controllers");
+Multithreaded.importControllers("./controllers");
 
 /* Use Multithreaded router */
 App.use("/", Multithreaded.router);
@@ -35,5 +32,5 @@ App.use((err: any, _req: Request, res: Response, next: NextFunction) => {
 
 /* Start listening */
 App.listen(3050, () => {
-    console.info("Listening")
+    console.info("Listening on http://localhost:3050")
 });
