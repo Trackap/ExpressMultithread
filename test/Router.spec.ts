@@ -1,4 +1,4 @@
-import Config from '../src/class/Config';
+import Config from '../src/config';
 Config.threadCount = 1;
 import { Multithreaded } from '../src/class/Router';
 import { expect } from 'chai';

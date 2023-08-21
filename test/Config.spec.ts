@@ -1,15 +1,16 @@
-import Config from '../src/class/Config';
+import Config from '../src/config';
 import { cleanRequest } from '../src/functions/cleanRequest';
 import { expect } from 'chai';
-// import { merge } from '../src/functions/utils/mergeObject';
+import { merge } from '../src/functions/utils/mergeObject';
+import { Request } from 'express';
 
-const defObj = {
+const defaultObj = {
     body: undefined,
-    headers: undefined,
-    method: undefined,
     params: undefined,
+    query: undefined,
+    headers: undefined,
     path: undefined,
-    query: undefined
+    method: undefined
 };
 
 describe('Config tests', () => {
@@ -34,9 +35,10 @@ describe('Config tests', () => {
         it("should clean object", () => {
             const req = {
                 test: true,
-                route: {}
+                route: {},
+                disapear: () => {}
             } as any;
-            expect(Config.cleanRequest(req)).to.deep.equal(defObj);
+            expect(Config.cleanRequest(req)).to.deep.equal(defaultObj);
         });
 
         it("should merge cleanReq function", () => {
@@ -45,10 +47,10 @@ describe('Config tests', () => {
                 test: true,
                 route: {}
             } as any;
-            Config.cleanRequest = func;
+            Config.cleanRequest = (req: Request) => merge(func(req), cleanRequest(req));
             expect(Config.cleanRequest(req)).to.deep.equal(Object.assign({
                 test: false,
-            }, {...defObj, route: {}}));
+            }, {...defaultObj, route: {}}));
         });
     });
 });
