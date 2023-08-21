@@ -36,13 +36,13 @@ export class MultithreadedRouter {
     };
 
     /* Use a global middleware */
-    public use(middleware: string, ...args: Serializable[]): void {
-        Parent!.addMiddleware(middleware, args);
+    public use(path: string, ...args: Serializable[]): void {
+        Parent!.addMiddleware(path, args);
     };
 
     /* Unuse a global middleware */
-    public unuse(middleware?: string, ...args: Serializable[]) : void {
-        Parent!.removeMiddleware(args, middleware);
+    public unuse(path?: string, ...args: Serializable[]) : void {
+        Parent!.removeMiddleware(args, path);
     };
 
     /*  Getters */
