@@ -75,7 +75,10 @@ class Parent {
         });
         /* Handle child errors */
         child.on(error, (e: Error) => {
-            throw e;
+            if (Config.restartThreads)
+                return this.newChild();
+            else
+                throw e;
         });
         /* Update child sources */
         postChild(child, {

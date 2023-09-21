@@ -20,6 +20,7 @@ const cfg = {
     threadCount: userCfg?.threadCount ?? (process.env.THREAD_COUNT === undefined ? cpus().length : parseInt(process.env.THREAD_COUNT)),
     cleanRequest: userCfg?.cleanRequest ? (req: Request) => merge(userCfg!.cleanRequest!(req), cleanRequest(req)) : cleanRequest,
     plugins: importPlugin(userCfg?.plugins ?? [])
+    restartThreads: userCfg?.restartThreads ?? true
 };
 
 export default cfg;
