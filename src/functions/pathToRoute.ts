@@ -12,8 +12,10 @@ import { __route, defaultStr, empty } from "../constants/strings";
 
 /* Controller plugins */
 const ctlPlugins = Config.plugins.filter(p => p.kind === PluginType.controllerDecorator);
+Config.debug && console.debug("Loaded controller plugins:", ctlPlugins);
 /* Route plugins */
 const rtPlugins = Config.plugins.filter(p => p.kind === PluginType.routeDecorator);
+Config.debug && console.debug("Loaded route plugins:", rtPlugins);
 /* Binding */
 const ogopd = (m: any) => Object.getOwnPropertyDescriptors(m);
 

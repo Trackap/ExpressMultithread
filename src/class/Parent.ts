@@ -36,6 +36,7 @@ class Parent {
 
     private newChild() : void {
         this.inc++;
+        Config.verbose && console.info("Starting thread id :", this.inc);
         /* Create child */
         const child = new Worker(__dirname + slash + childFile, {
             workerData: {
@@ -80,6 +81,7 @@ class Parent {
             else
                 throw e;
         });
+        Config.debug && console.debug("Creating child id ", this.inc, " :\nsources :", this.sources, "\nmid: ", this.middlewares);
         /* Update child sources */
         postChild(child, {
             cmd: ParentCmd.addSource,

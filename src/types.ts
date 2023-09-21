@@ -101,5 +101,8 @@ export interface BaseConfig {
     threadCount?: number;
     cleanRequest?: (req: Request) => Request;
     plugins?: string[];
+    overrideConsole?: boolean;
+    debug?: boolean;
+    verbose?: boolean;
     restartThreads?: boolean;
 };

@@ -20,7 +20,7 @@ import { Request } from "express";
 /* Constants */
 import { fnStr, message, nl, noExport, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
 import { importModule } from "../functions/utils/importModule";
-
+import Config from "../config";
 
 const pNext = function (id: number, tid: string, arg: Serializable) : void {
     postParent({
@@ -46,7 +46,7 @@ class Child {
         if (!parentPort)
             throw new Error(noParentPort);
         /* Override console to be able to identify child */
-        override(this.id);
+        Config.overrideConsole && override(this.id);
         /* Init child */
         this.initChild();
     };
@@ -75,7 +75,7 @@ class Child {
             cmd: ChildCmd.ready,
             id: this.id
         });
-        console.info("ready");
+        Config.verbose && console.info("Child ready");
     };
 
     private async handleRequest(req: Request, _id: string) : Promise<void> {
