@@ -36,7 +36,7 @@ App.listen(3000, () => console.info("Listening on port 3000"));
 import { controller, route } from 'expressmultithread/dist/decorators';
 import { Request, Response } from 'express';
 
-@controller
+@controller()
 export class ExampleController {
     @route("get", "/hello")
     public hello(_req: Request, res: Response) {
