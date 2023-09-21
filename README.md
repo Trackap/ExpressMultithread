@@ -100,6 +100,23 @@ Please note that transferred informations between threads must be serialisable d
 
 Middlewares passed in controller or route args, can't be error middleware, this is not handled by the multithreadedrouter, despite, you can handle errors with the main thread following the [errorHandling example](https://github.dev/Trackap/ExpressMultithread/tree/main/examples/errorHandling).
 
+Please note that all path sent in args to plugins are resolve with the current working directory.
+
+Config file
+-
+You can a file named `em.config.ts` which must export as default an object typed with the following type :
+```ts
+import { BaseConfig } from "expressmultithread/dist/types";
+```
+In this object you will be able to define different variables :
+* threadCount (number): Number of child thread to launch
+* cleanRequest ((req: Request) => Request): A function which let you pass more args in your Request variables
+* plugins (string[]): Path array of plugin files
+* overrideConsole (boolean): Enable/Disable identifier on console usages
+* debug (boolean): Enable/Disable debug of module
+* verbose (boolean): Enable/Disable extra logging in console
+* restartThreads (boolean): Enable/Disable automatic restart of a new thread in case of crash
+
 More examples
 -
 Check [examples folder](https://github.dev/Trackap/ExpressMultithread/tree/main/examples) for more examples
