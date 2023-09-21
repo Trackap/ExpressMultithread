@@ -15,6 +15,8 @@ export const fnStr = "function";
 export const defaultStr = "default";
 export const __controller = "__controller";
 export const __route = "__route";
+export const get = "get";
+export const set = "set";
 
 /* Files */
 export const tsFile = ".ts";
@@ -37,6 +39,7 @@ export const routeNotFound = "Route not found";
 export const notImplemented = "Not implemented";
 export const noExport = "No default export found in";
 export const invalidPlugin = "Invalid plugin";
+export const keywordUse = "Decoration of a class method named with keyword (get or set)";
 
 /* Console */
 export const Reset = "\x1b[0m"
