@@ -1,3 +1,5 @@
+import { isCompiled } from "./isCompiled";
+
 /* Characters */
 export const slash = "/";
 export const empty = "";
@@ -19,10 +21,10 @@ export const get = "get";
 export const set = "set";
 
 /* Files */
-export const tsFile = ".ts";
+export const tsFile =  isCompiled ? ".js": ".ts";
 export const node_modules = "node_modules";
 export const childFile = "Child.js";
-export const cfgFile = "em.config.ts";
+export const cfgFile = `em.config.${isCompiled ? "js": "ts"}`;
 
 /* Workers */
 export const message = "message";
