@@ -45,23 +45,25 @@ export class ExampleController {
 }
 ```
 
+4. Create a configuration file, at root of project :
+```ts
+// file em.config.ts
+import { BaseConfig } from "expressmultithread/dist/types";
+
+/* Define a config */
+const config : BaseConfig = {
+    threadCount: 2 // Define number of thread which run your web server
+};
+
+/* Export it as default*/
+export default config;
+```
+
 Now you can run index.ts and open the following url http://localhost:3000/hello.
 If you had trouble with this example you can see [example ReadMe](https://github.dev/Trackap/ExpressMultithread/tree/main/examples/exampleReadMe).
 
 Too many threads created ?
-You  just have to configure it, it can be done by two ways :
-
-- Set THREAD_COUNT variable in your env, (check [cross-env](https://www.npmjs.com/package/cross-env))
-- Set thread count with a config file :
-```ts
-// Place this content inside a file called em.config.ts a the root of your project
-import { BaseConfig } from "expressmultithread/dist/types";
-const config : BaseConfig = {
-    threadCount: 2 // Can be done with env variable THREAD_COUNT=2
-};
-export default config;
-```
-
+You  just have to adjust it, with the configuration file.
 
 API
 -
