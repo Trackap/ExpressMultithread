@@ -3,7 +3,7 @@ import { BaseConfig } from "../../src/types";
 
 /* Define a config */
 const config : BaseConfig = {
-    threadCount: 2, // Can be done with env variable THREAD_COUNT=2
+    threadCount: 2,
 
     /* By default, req has the following properties :
     body,
