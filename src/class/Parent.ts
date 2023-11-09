@@ -76,6 +76,7 @@ class Parent {
         });
         /* Handle child errors */
         child.on(error, (e: Error) => {
+            console.error(e);
             if (Config.restartThreads)
                 return this.newChild();
             else
