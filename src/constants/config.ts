@@ -1,5 +1,6 @@
 /* Modules */
 import { cpus } from "os";
+import { resolve } from "path";
 
 /* Functions */
 import { importModule } from "../functions/utils/importModule";
@@ -22,7 +23,8 @@ const cfg = {
     overrideConsole: userCfg?.overrideConsole ?? true,
     debug: userCfg?.debug ?? false,
     verbose: userCfg?.verbose ?? true,
-    restartThreads: userCfg?.restartThreads ?? true
+    restartThreads: userCfg?.restartThreads ?? true,
+    tsconfigPath: userCfg?.tsconfigPath ?? resolve(process.cwd(), "./tsconfig.json")
 };
 
 export default cfg;

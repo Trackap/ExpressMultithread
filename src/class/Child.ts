@@ -1,10 +1,10 @@
 /* Modules */
 import { workerData, parentPort, isMainThread } from "worker_threads";
 import { register } from 'ts-node';
-import { resolve } from "path";
 
 /* Register ts-node if were're in compiled version */
-__filename.endsWith(".js") && register(require(resolve(process.cwd(), "tsconfig.json")));
+import Config from "../config";
+__filename.endsWith(".js") && register(require(Config.tsconfigPath));
 
 /* Functions */
 import { override } from "../functions/overrideConsole";
@@ -20,7 +20,6 @@ import { Request } from "express";
 /* Constants */
 import { fnStr, message, nl, noExport, noMain, noParentPort, routeNotFound, unknownCmd } from "../constants/strings";
 import { importModule } from "../functions/utils/importModule";
-import Config from "../config";
 
 const pNext = function (id: number, tid: string, arg: Serializable) : void {
     postParent({

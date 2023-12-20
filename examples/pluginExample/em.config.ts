@@ -6,7 +6,8 @@ const config : BaseConfig = {
     plugins: [ // Define plugin
         "./plugin/testPlugin.ts", // Add you plugin, it must be a .ts file which export as default a class which extends Plugin
         "./plugin/replacePlugin.ts"
-    ]
+    ],
+    tsconfigPath: "../../tsconfig.json"
 };
 
 export default config;

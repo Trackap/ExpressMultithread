@@ -19,7 +19,8 @@ const config : BaseConfig = {
         return {
             hello: req.hello
         } as RequestWithHello;
-    }
+    },
+    tsconfigPath: "../../tsconfig.json"
 };
 
 /* Export it as default*/

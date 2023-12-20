@@ -1,5 +1,8 @@
 const { resolve } = require('path');
-require('ts-node').register(require(resolve(process.cwd(), "tsconfig.json")));
+const registered = require('ts-node').register();
+const { Config } = require("../config");
+registered.enabled(false);
+require('ts-node').register(require(Config.tsconfigPath));
 try {
     require(resolve(__filename.replace(".js", ".ts")));
 } catch (e) {

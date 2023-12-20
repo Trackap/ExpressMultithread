@@ -8,8 +8,8 @@ import Multithreaded from "../../src/index";
 const App = express();
 
 /* Global middlewares, which runs on child thread */
-Multithreaded.use("./expressJson.ts");
-Multithreaded.use("./withArgs.ts", "Hello World !");
+Multithreaded.use("./expressJson");
+Multithreaded.use("./withArgs", "Hello World !");
 
 /* Import controllers which run on child threads */
 Multithreaded.importControllers("./controllers");
