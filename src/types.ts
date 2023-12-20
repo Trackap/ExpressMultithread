@@ -59,8 +59,7 @@ export enum ChildCmd {
 }
 
 export enum ParentCmd {
-    addSource = 0,
-    addMiddleware = 1,
+    setSource = 1,
     request = 2
 }
 
@@ -106,4 +105,15 @@ export interface BaseConfig {
     verbose?: boolean; // Enable status messages of Parent & Child threads
     restartThreads?: boolean; // Restart a child if a crash occur
     tsconfigPath?: string; // Specify tsconfig.json path
+}
+
+export enum SourceType {
+    CONTROLLER = 0,
+    GLOBAL_MIDDLEWARE = 1
+}
+
+export interface Source {
+    path: string;
+    type: SourceType;
+    args?: Serializable[];
 }

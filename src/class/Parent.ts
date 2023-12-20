@@ -6,26 +6,24 @@ import { randomUUID } from 'crypto';
 import { sleep } from '../functions/utils/sleep';
 
 /* Types */
-import { ChildData, Task, ParentCmd, ChildCmd, Serializable, SerializedMiddleware } from '../types';
+import { ChildCmd, ChildData, ParentCmd, Serializable, Source, SourceType, Task } from '../types';
 import { NextFunction, Request, Response } from 'express';
 
 /* Constants */
 import Config from '../config';
-import { childFile, childNotFound, error, message, slash, unknownCmd } from '../constants/strings';
+import { childFile, childNotFound, error, message, slash } from '../constants/strings';
 import { postChild } from '../functions/utils/postMessage';
 import { compareArray } from '../functions/utils/compareArray';
 
 class Parent {
     /* List of all childs */
     private childs: ChildData[] = [];
-    /* Sources of imports for thread workers */
-    private sources: string[] = [];
+    /* Sources of middlewares & imports */
+    private _sources: Source[] = [];
     /* List of unassigned tasks */
     private taskQueue: Task[] = [];
     /* Incremental id for childs */
     private inc : number = 0;
-    /* Global Middlewares */
-    private _middlewares : SerializedMiddleware[] = [];
 
     constructor(threadCount : number = Config.threadCount) {
         /* Create X childs */
@@ -71,7 +69,7 @@ class Parent {
                     parsed.arg !== undefined && next && next(parsed.arg);
                     break;
                 default:
-                    throw new Error(unknownCmd);
+                    throw new Error(`Unknown command : '${parsed.cmd}'`);
             }
         });
         /* Handle child errors */
@@ -82,16 +80,11 @@ class Parent {
             else
                 throw e;
         });
-        Config.debug && console.debug("Creating child id ", this.inc, " :\nsources :", this.sources, "\nmid: ", this.middlewares);
+        Config.debug && console.debug("Creating child id ", this.inc, " :\nsources :", this._sources);
         /* Update child sources */
         postChild(child, {
-            cmd: ParentCmd.addSource,
-            source: this.sources
-        });
-        /* Update child middlewares */
-        postChild(child, {
-            cmd: ParentCmd.addMiddleware,
-            middlewares: this.middlewares
+            cmd: ParentCmd.setSource,
+            source: this._sources
         });
         /* Save child */
         this.childs.push({
@@ -152,46 +145,49 @@ class Parent {
 
     public addSource(source : string[]) : void {
         /* Add source to sources */
-        this.sources.push(...source);
+        for (let i = 0; i < source.length; i++) {
+            this._sources.push({
+                path: source[i],
+                type: SourceType.CONTROLLER
+            })
+        }
         /* Send new sources to childs */
-        this.postChilds(ParentCmd.addSource, {
-            cmd: ParentCmd.addSource,
-            source
+        this.postChilds(ParentCmd.setSource, {
+            source: this._sources
         });
     };
 
     public addMiddleware(path: string, opts: Serializable[]) : void {
         /* Push in middlewares */
-        this.middlewares.push({
+        this._sources.push({
             path,
-            opts
+            type: SourceType.GLOBAL_MIDDLEWARE,
+            args: opts
         });
         /* Update childs */
-        this.postChilds(ParentCmd.addMiddleware, {
-            middlewares: this.middlewares
-        });
+        this.postChilds(ParentCmd.setSource, {
+            source: this._sources
+        })
     };
 
     public removeMiddleware(opts: Serializable[], path?: string) : void {
         /* Remove all middlewares if no path */
         if (!path) {
             /* Empty array */
-            this._middlewares = [];
+            this._sources = this._sources.filter((source) => source.type !== SourceType.GLOBAL_MIDDLEWARE)
         } else {
             /* Fetch middleware to remove */
-            for (let i = 0; i < this.middlewares.length; i++) {
-                let m = this.middlewares[i];
+            for (let i = 0; i < this._sources.length; i++) {
+                if (this._sources[i].type !== SourceType.GLOBAL_MIDDLEWARE) continue;
                 /* Path match with opts */
-                if (m.path === path && compareArray(m.opts, opts)) {
+                if (this._sources[i].path === path && compareArray(this._sources[i].args ?? [], opts))
                     /* Remove middleware */
-                    this.middlewares.splice(i, 1);
-                    continue;
-                }
+                    this._sources.splice(i, 1)
             }
         }
         /* Update childs */
-        this.postChilds(ParentCmd.addMiddleware, {
-            middlewares: this.middlewares
+        this.postChilds(ParentCmd.setSource, {
+            source: this._sources
         });
     };
 
@@ -211,13 +207,10 @@ class Parent {
     };
 
     /* Getters */
-    public get sourcesList() : string[] {
-        return this.sources;
+    public get sourcesList() : Source[] {
+        return this._sources;
     };
-    public get middlewares() : SerializedMiddleware[] {
-        return this._middlewares;
-    };
-};
+}
 
 export const Instance = isMainThread ? new Parent() : null;
 Instance?.run();

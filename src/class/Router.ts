@@ -13,7 +13,6 @@ import { InternalRoute, Serializable } from '../types';
 
 /* Constants */
 import Config from '../constants/config';
-import { __route } from '../constants/strings';
 import { wrapRequest } from '../functions/wrap';
 const defaultPath = process.cwd();
 
@@ -49,7 +48,7 @@ export class MultithreadedRouter {
     public get router() : ExpressRouter {
         return this._router;
     };
-};
+}
 
 export const Multithreaded = new MultithreadedRouter();
 export default Multithreaded;
