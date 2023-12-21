@@ -46,25 +46,26 @@ class Parent {
             /* Deserialize data */
             const parsed = JSON.parse(data);
             /* Get child */
-            const i = this.childs.find((child) => child.id === parsed.id);
-            if (!i) throw new Error(childNotFound);
+            // const i = this.childs.find((child) => child.id === parsed.id);
+            const z = this.childs.findIndex(child => child.id === parsed.id);
+            if (z === -1) throw new Error(childNotFound);
             /* Handle cmds */
             switch (parsed.cmd) {
                 case ChildCmd.ready: 
                     /* set child as ready */
-                    i.ready = true;
+                    this.childs[z].ready = true;
                     break;
                 case ChildCmd.response:
-                    /* Get response */
-                    let res = i.tasks.find((t) => t.id === parsed.tid)?.res;
+                    /* Get response index */
+                    const j = this.childs[z].tasks.findIndex((t) => t.id === parsed.tid);
                     /* Send response */
-                    res && (res as any)[parsed.call](...parsed.args);
+                    j !== -1  && (this.childs[z].tasks[j].res as any)[parsed.call](...parsed.args);
                     break;
                 case ChildCmd.next:
                     /* Get task index */
-                    let index = i.tasks.findIndex((t) => t.id === parsed.tid);
+                    let index = this.childs[z].tasks.findIndex((t) => t.id === parsed.tid);
                     /* Remove task && get next */
-                    let next = (index !== -1 && i.tasks.splice(index, 1).at(0)?.next);
+                    let next = (index !== -1 && this.childs[z].tasks.splice(index, 1).at(0)?.next);
                     /* Call next if args are provided */
                     parsed.arg !== undefined && next && next(parsed.arg);
                     break;
@@ -97,10 +98,13 @@ class Parent {
 
     public async run() : Promise<void> {
         /* Loop infinitly and dispatch tasks if there is any */
-        while (true) {
-            await sleep(1);
-            this.taskQueue.length && this.dispatchTask();
-        }
+        // while (true) {
+        //     await sleep(1);
+        //     this.taskQueue.length && this.dispatchTask();
+        // }
+        setInterval(() => {
+            this.taskQueue.length && this.dispatchTask()
+        }, 1);
     };
 
     private dispatchTask() : void {

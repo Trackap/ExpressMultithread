@@ -8,6 +8,10 @@ export type Callback = (req: Request, res: Response) => (any | Promise<any>);
 
 export type Middleware = (req: Request, res: Response, next: NextFunction) => (any | Promise<any>);
 
+export type ErrorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => (any | Promise<any>);
+
+export type Layer = Callback | Middleware | ErrorMiddleware;
+
 export type Serializable = string
 | number
 | boolean
@@ -33,7 +37,7 @@ export interface InternalRoute {
     path: string;
     middlewares: Middleware[];
     cb: Callback;
-    callstack?: (Middleware | Callback)[];
+    callstack?: Layer[];
     endpoint?: string;
 }
 
@@ -117,3 +121,11 @@ export interface Source {
     type: SourceType;
     args?: Serializable[];
 }
+
+export interface NextContext {
+    nextCalled: boolean;
+    promise: Promise<any>;
+    done: (arg?: any) => any;
+    complete: (arg?: any) => void;
+}
+

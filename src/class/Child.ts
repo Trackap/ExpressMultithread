@@ -9,17 +9,26 @@ __filename.endsWith(".js") && register(require(Config.tsconfigPath));
 /* Functions */
 import { override } from "../functions/overrideConsole";
 import { pathToRoute } from "../functions/pathToRoute";
-import { callLoop } from "../functions/callLoop";
+import { CallLoop, callLoop } from "../functions/callLoop";
 import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 import { importModule } from "../functions/utils/importModule";
 
 /* Types */
-import { Callback, ChildCmd, InternalRoute, Middleware, ParentCmd, Serializable, Source, SourceType} from "../types";
+import {
+    Layer,
+    ChildCmd,
+    InternalRoute,
+    Middleware,
+    ParentCmd,
+    Serializable,
+    Source,
+    SourceType
+} from "../types";
 import { Request } from "express";
 
 /* Constants */
-import {message, noMain, fnStr, nl, routeNotFound } from "../constants/strings";
+import {message, noMain, fnStr, nl, routeNotFound, route, router} from "../constants/strings";
 
 const pNext = function (id: number, tid: string, arg: Serializable) : void {
     postParent({
@@ -72,31 +81,17 @@ class Child {
         Config.verbose && console.info("Child ready");
     };
 
-    private async handleRequest(req: Request, _id: string) : Promise<void> {
+    private handleRequest(req: Request, _id: string) {
         /* Get internal route name */
         const k = req.method.toLowerCase() + req.path;
         if (!this.routes[k])
             throw new Error(routeNotFound);
         /* Loop through callstack */
-        callLoop(req, overrideRes(this.id, _id), this.routes[k].callstack!)
+        new CallLoop(req, overrideRes(this.id, _id), this.routes[k].callstack!).handle()
             /* Handle next() */
-            .then((res?: "route" | "router") => {
-                switch (res) {
-                    case "route":
-                        pNext(this.id, _id, res);
-                        break;
-                    case "router":
-                        pNext(this.id, _id, res);
-                        break;
-                    default:
-                        pNext(this.id, _id, undefined);
-                        break;
-                }
-            })
+            .then((res: unknown) => pNext(this.id, _id, res === route || res === router ? res : undefined))
             /* Handle errors */
-            .catch((e: Error) => {
-                pNext(this.id, _id, e.message + nl + e.stack);
-            });
+            .catch((e: Error) => pNext(this.id, _id, e.message + nl + e.stack));
     };
 
     private setSources(sources: Source[]) {
@@ -106,9 +101,8 @@ class Child {
             const s = sources[i];
             switch (s.type) {
                 case SourceType.CONTROLLER:
-                    const routes = this.applyMiddleware(s, mid);
                     /* Add new routes to router */
-                    Object.assign(this.routes, routes);
+                    Object.assign(this.routes, this.applyMiddleware(s, mid));
                     break;
                 case SourceType.GLOBAL_MIDDLEWARE:
                     this.applyHandler(s, mid);
@@ -127,7 +121,7 @@ class Child {
             if (this.routes[keys[i]]) {
                 console.warn(`Warning : Redefinition of route : ${keys[i]}, will override previous handling.`)
             }
-            routes[keys[i]].callstack = (mid as (Middleware | Callback)[]).concat(routes[keys[i]].callstack!);
+            routes[keys[i]].callstack = (mid as Layer[]).concat(routes[keys[i]].callstack!);
         }
         return routes;
     }

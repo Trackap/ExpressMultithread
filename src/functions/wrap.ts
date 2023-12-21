@@ -17,4 +17,4 @@ export function wrapRequest(key: string) : Middleware {
     return (req: Request, res: Response, next: NextFunction) => {
         Parent!.addTask(key, req, res, next);
     };
-};
+}
