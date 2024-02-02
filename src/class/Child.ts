@@ -9,7 +9,7 @@ __filename.endsWith(".js") && register(require(Config.tsconfigPath));
 /* Functions */
 import { override } from "../functions/overrideConsole";
 import { pathToRoute } from "../functions/pathToRoute";
-import { CallLoop, callLoop } from "../functions/callLoop";
+import { CallLoop } from "../functions/callLoop";
 import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 import { importModule } from "../functions/utils/importModule";
