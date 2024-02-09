@@ -93,10 +93,11 @@ export class CallLoop {
                     else
                         cb()
                 })
+        } else {
+            /* Solve promise in case next was not called */
+            ctx.complete()
+            this.resolve!(undefined)
         }
-        /* Solve promise in case next was not called */
-        !ctx.nextCalled && ctx.complete();
-        this.resolve!(undefined)
     }
 
     private goError(i: number, err: any) {
