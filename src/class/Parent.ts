@@ -1,13 +1,8 @@
 /* Modules */
 import { Worker, isMainThread } from 'worker_threads';
-import { randomUUID } from 'crypto';
-
-/* Functions */
-import { sleep } from '../functions/utils/sleep';
 
 /* Types */
 import { ChildCmd, ChildData, ParentCmd, Serializable, Source, SourceType, Task } from '../types';
-import { NextFunction, Request, Response } from 'express';
 
 /* Constants */
 import Config from '../config';
@@ -20,8 +15,6 @@ class Parent {
     private childs: ChildData[] = [];
     /* Sources of middlewares & imports */
     private _sources: Source[] = [];
-    /* List of unassigned tasks */
-    private taskQueue: Task[] = [];
     /* Incremental id for childs */
     private inc : number = 0;
 
@@ -182,10 +175,13 @@ class Parent {
         }
     };
 
-    /* Getters */
-    public get sourcesList() : Source[] {
+    /* Getters (FOR TESTS) */
+    public get _sourcesList() : Source[] {
         return this._sources;
     };
+    public get _inc(): Number {
+        return this.inc;
+    }
 }
 
 export const Instance = isMainThread ? new Parent() : null;
