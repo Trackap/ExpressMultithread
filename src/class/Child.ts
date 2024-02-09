@@ -6,10 +6,12 @@ import { register } from 'ts-node';
 import Config from "../config";
 __filename.endsWith(".js") && register(require(Config.tsconfigPath));
 
+/* Classes */
+import { CallLoop } from "../class/CallLoop";
+
 /* Functions */
 import { override } from "../functions/overrideConsole";
 import { pathToRoute } from "../functions/pathToRoute";
-import { CallLoop } from "../functions/callLoop";
 import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 import { importModule } from "../functions/utils/importModule";
@@ -105,7 +107,8 @@ class Child {
                     Object.assign(this.routes, this.applyMiddleware(s, mid));
                     break;
                 case SourceType.GLOBAL_MIDDLEWARE:
-                    this.applyHandler(s, mid);
+                    /* Register new mid or apply new err mid to all declared routes */
+                    mid = this.applyHandler(s, mid);
                     break;
                 default:
                     throw new Error(`Unknown source: '${sources[i].type}'`)
