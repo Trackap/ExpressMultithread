@@ -15,6 +15,7 @@ import { pathToRoute } from "../functions/pathToRoute";
 import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 import { importModule } from "../functions/utils/importModule";
+import { makeObj } from "../functions/utils/makeObj";
 
 /* Types */
 import {
@@ -93,7 +94,7 @@ class Child {
             /* Handle next() */
             .then((res: unknown) => pNext(this.id, _id, res === route || res === router ? res : undefined))
             /* Handle errors */
-            .catch((e: Error) => pNext(this.id, _id, e.message + nl + e.stack));
+            .catch((e: Error) => pNext(this.id, _id, makeObj(e, Object.getOwnPropertyNames(e))));
     };
 
     private setSources(sources: Source[]) {
