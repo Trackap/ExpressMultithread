@@ -139,17 +139,20 @@ class Child {
             throw new Error(`No default exported function on path : '${source.path}'`);
         /* Apply args if needed */
         source.args && source.args.length && (cb = cb(...source.args))
-        /* Classic middleware */
-        if (cb.length === 3) {
-            mid.push(cb);
-        /* Error Handler middleware */
-        } else if (cb.length === 4) {
-            const keys = Object.keys(this.routes);
-            for (let i = 0; i < keys.length; i++) {
-                this.routes[keys[i]].callstack = this.routes[keys[i]].callstack!.concat(cb)
-            }
-        } else {
-            throw new Error(`Exported function is not a correct middleware : ${source.path}`);
+        switch (cb.length) {
+            /* Classic middleware */
+            case 3:
+                mid.push(cb);
+                break;
+            /* Error Handler middleware */
+            case 4:
+                const keys = Object.keys(this.routes);
+                for (let i = 0; i < keys.length; i++) {
+                    this.routes[keys[i]].callstack = this.routes[keys[i]].callstack!.concat(cb)
+                }
+                break;
+            default:
+                throw new Error(`Exported function is not a correct middleware : ${source.path}`);
         }
         return mid;
     }
