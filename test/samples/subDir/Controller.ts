@@ -8,9 +8,14 @@ export class Controller {
         res.status(200).send("Hello World!");
     }
 
+    @route("get", "/crash")
+    public crasher(_req: Request, _res: Response) {
+        throw new Error("Crashing");
+    }
+
     @route("post", "/")
-    public post(_req: Request, _res: Response) {
-        return "Hello";
+    public post(_req: Request, res: Response) {
+        res.status(201).send("Hi!");
     }
 
     @route("put", "/")

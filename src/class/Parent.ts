@@ -1,13 +1,8 @@
 /* Modules */
 import { Worker, isMainThread } from 'worker_threads';
-import { randomUUID } from 'crypto';
-
-/* Functions */
-import { sleep } from '../functions/utils/sleep';
 
 /* Types */
 import { ChildCmd, ChildData, ParentCmd, Serializable, Source, SourceType, Task } from '../types';
-import { NextFunction, Request, Response } from 'express';
 
 /* Constants */
 import Config from '../config';
@@ -20,8 +15,6 @@ class Parent {
     private childs: ChildData[] = [];
     /* Sources of middlewares & imports */
     private _sources: Source[] = [];
-    /* List of unassigned tasks */
-    private taskQueue: Task[] = [];
     /* Incremental id for childs */
     private inc : number = 0;
 
@@ -46,25 +39,26 @@ class Parent {
             /* Deserialize data */
             const parsed = JSON.parse(data);
             /* Get child */
-            const i = this.childs.find((child) => child.id === parsed.id);
-            if (!i) throw new Error(childNotFound);
+            // const i = this.childs.find((child) => child.id === parsed.id);
+            const z = this.childs.findIndex(child => child.id === parsed.id);
+            if (z === -1) throw new Error(childNotFound);
             /* Handle cmds */
             switch (parsed.cmd) {
                 case ChildCmd.ready: 
                     /* set child as ready */
-                    i.ready = true;
+                    this.childs[z].ready = true;
                     break;
                 case ChildCmd.response:
-                    /* Get response */
-                    let res = i.tasks.find((t) => t.id === parsed.tid)?.res;
+                    /* Get response index */
+                    const j = this.childs[z].tasks.findIndex((t) => t.id === parsed.tid);
                     /* Send response */
-                    res && (res as any)[parsed.call](...parsed.args);
+                    j !== -1  && (this.childs[z].tasks[j].res as any)[parsed.call](...parsed.args);
                     break;
                 case ChildCmd.next:
                     /* Get task index */
-                    let index = i.tasks.findIndex((t) => t.id === parsed.tid);
+                    let index = this.childs[z].tasks.findIndex((t) => t.id === parsed.tid);
                     /* Remove task && get next */
-                    let next = (index !== -1 && i.tasks.splice(index, 1).at(0)?.next);
+                    let next = (index !== -1 && this.childs[z].tasks.splice(index, 1).at(0)?.next);
                     /* Call next if args are provided */
                     parsed.arg !== undefined && next && next(parsed.arg);
                     break;
@@ -95,15 +89,7 @@ class Parent {
         });
     };
 
-    public async run() : Promise<void> {
-        /* Loop infinitly and dispatch tasks if there is any */
-        while (true) {
-            await sleep(1);
-            this.taskQueue.length && this.dispatchTask();
-        }
-    };
-
-    private dispatchTask() : void {
+    public dispatchTask(task: Task) : void {
         const occupation : number[] = [];
         /* Get occupation of each child */
         for (let i = 0; i < this.childs.length; i++) {
@@ -111,35 +97,18 @@ class Parent {
             child.ready ? occupation.push(child.tasks.length) : occupation.push(Infinity);
         }
         /* Dispatch task queue */
-        while (this.taskQueue.length) {
-            const min = Math.min(...occupation);
-            /* Avoid send to busy childs */
-            if (min === Infinity)
-                break;
-            /* Get index of child less used */
-            const i = occupation.indexOf(min);
-            /* Move task from queue to child tasks */
-            const task = this.taskQueue.shift()!;
-            this.childs[i].tasks.push(task);
-            /* Increase occupation score */
-            occupation[i]++;
-            /* Send task to child */
-            postChild(this.childs[i].instance, {
-                cmd: ParentCmd.request,
-                req: Config.cleanRequest(task.req),
-                id: task.id
-            });
-        }
-    };
-
-    public addTask(endpoint: string, req: Request, res: Response, next: NextFunction) : void {
-        /* Save task */
-        this.taskQueue.push({
-            endpoint,
-            req,
-            res,
-            next,
-            id: randomUUID()
+        const min = Math.min(...occupation);
+        /* Get index of child less used */
+        const i = occupation.indexOf(min);
+        /* Move task to child tasks */
+        this.childs[i].tasks.push(task);
+        /* Increase occupation score */
+        occupation[i]++;
+        /* Send task to child */
+        postChild(this.childs[i].instance, {
+            cmd: ParentCmd.request,
+            req: Config.cleanRequest(task.req),
+            id: task.id
         });
     };
 
@@ -206,13 +175,15 @@ class Parent {
         }
     };
 
-    /* Getters */
-    public get sourcesList() : Source[] {
+    /* Getters (FOR TESTS) */
+    public get _sourcesList() : Source[] {
         return this._sources;
     };
+    public get _inc(): Number {
+        return this.inc;
+    }
 }
 
 export const Instance = isMainThread ? new Parent() : null;
-Instance?.run();
 
 export default Instance;

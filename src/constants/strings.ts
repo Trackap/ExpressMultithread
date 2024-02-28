@@ -17,6 +17,8 @@ export const __controller = "__controller";
 export const __route = "__route";
 export const get = "get";
 export const set = "set";
+export const route = "route";
+export const router = "router";
 
 /* Files */
 export const tsFile =  isCompiled ? ".js": ".ts";

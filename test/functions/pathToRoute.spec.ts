@@ -5,7 +5,7 @@ describe('pathToRoute tests', () => {
     it("should return routes", () => {
         const routes = pathToRoute("./test/samples");
         expect(routes).to.be.a("object");
-        expect(Object.keys(routes).length).to.equal(7);
+        expect(Object.keys(routes).length).to.equal(8);
         expect(routes).to.have.property("get/");
         expect(routes["get/"].method).to.be.equal("get");
         expect(routes["get/"].path).to.be.equal("/");
