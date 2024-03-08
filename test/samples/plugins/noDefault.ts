@@ -4,6 +4,7 @@ import  { PluginType, PluginController, ControllerDecoratorOpts, ObjectPrototype
 export class NoDefault extends Plugin implements PluginController {
     public kind : PluginType.controllerDecorator = PluginType.controllerDecorator;
 
-    public cb(_opts: ControllerDecoratorOpts, _proto: ObjectPrototype<ControllerDecoratorOpts>) {
+    public cb(opts: ControllerDecoratorOpts, _proto: ObjectPrototype<ControllerDecoratorOpts>) : ControllerDecoratorOpts {
+        return opts;
     };
 };

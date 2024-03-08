@@ -6,6 +6,7 @@ export default class NoDefault extends Plugin implements PluginController {
 
     public test : boolean = true;
 
-    public cb(_opts: ControllerDecoratorOpts, _proto: ObjectPrototype<ControllerDecoratorOpts>) {
+    public cb(opts: ControllerDecoratorOpts, _proto: ObjectPrototype<ControllerDecoratorOpts>) : ControllerDecoratorOpts {
+        return opts;
     };
 };
