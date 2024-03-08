@@ -2,6 +2,7 @@
 import { toArray } from "./utils/toArray";
 import { walk } from "./utils/walk";
 import { importModule } from "./utils/importModule";
+import { deepCopy } from "./utils/deepCopy";
 
 /* Types */
 import { ControllerDecoratorOpts, InternalRoute, PluginType } from "../types";
@@ -23,10 +24,10 @@ function exploreController(module : any) : Record<string, InternalRoute> | undef
     /* Make sure module is a controller */
     if (!ogopd(module)?.__controller?.value) return undefined;
     /* Get controller properties */
-    const controller = ogopd(module).__controller.value as ControllerDecoratorOpts;
+    let controller = ogopd(module).__controller.value as ControllerDecoratorOpts;
     /* Iterate on controller plugins */
     for (let i = 0; i < ctlPlugins.length; i++)
-        ctlPlugins[i].cb(controller, ogopd(module));
+        controller = ctlPlugins[i].cb(deepCopy(controller), ogopd(module));
     const routes : Record<string, InternalRoute> = {};
     const methods = ogopd(module.prototype);
     const keys = Object.keys(methods);
@@ -35,11 +36,11 @@ function exploreController(module : any) : Record<string, InternalRoute> | undef
         /* Skip if key is not a route */
         if (!keys[i].endsWith(__route)) continue;
         /* Register route with corresponding middlewares */
-        const route = methods[keys[i]].value as InternalRoute;
+        let route = methods[keys[i]].value as InternalRoute;
         const propertyKey = keys[i].slice(0, -__route.length);
         /* Iterate on route plugins */
         for (let j = 0; j < rtPlugins.length; j++)
-            rtPlugins[j].cb(route, propertyKey, ogopd(module.prototype));
+            route = rtPlugins[j].cb(deepCopy(route), propertyKey, ogopd(module.prototype));
         /* Full endpoint path */
         const endpoint = (controller.path ?? empty) + route.path;
         const controllerMid = toArray(controller.middlewares ?? []);

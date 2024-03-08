@@ -92,12 +92,12 @@ export interface PluginBase {
 
 export interface PluginRoute extends PluginBase {
     kind: PluginType.routeDecorator;
-    cb: (route: InternalRoute, propertyKey : string, proto: ObjectPrototype<InternalRoute>) => void;
+    cb: (route: InternalRoute, propertyKey : string, proto: ObjectPrototype<InternalRoute>) => InternalRoute;
 }
 
 export interface PluginController extends PluginBase {
     kind: PluginType.controllerDecorator;
-    cb: (controller : ControllerDecoratorOpts, proto: ObjectPrototype<ControllerDecoratorOpts>) => void;
+    cb: (controller : ControllerDecoratorOpts, proto: ObjectPrototype<ControllerDecoratorOpts>) => ControllerDecoratorOpts;
 }
 
 export interface BaseConfig {
