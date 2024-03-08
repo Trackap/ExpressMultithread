@@ -1,12 +1,12 @@
 /* Modules */
 import { cpus } from "os";
-import { resolve } from "path";
 
 /* Functions */
 import { importModule } from "../functions/utils/importModule";
 import { cleanRequest } from "../functions/cleanRequest";
 import { merge } from "../functions/utils/mergeObject";
 import { importPlugin } from "../functions/importPlugins";
+import { resolvePath } from "../functions/utils/resolvePath";
 
 /* Types */
 import { BaseConfig } from "../types";
@@ -24,7 +24,7 @@ const cfg = {
     debug: userCfg?.debug ?? false,
     verbose: userCfg?.verbose ?? true,
     restartThreads: userCfg?.restartThreads ?? true,
-    tsconfigPath: userCfg?.tsconfigPath ?? resolve(process.cwd(), "./tsconfig.json")
+    tsconfigPath: userCfg?.tsconfigPath ?? resolvePath("./tsconfig.json")
 };
 
 export default cfg;

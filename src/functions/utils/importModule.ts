@@ -1,14 +1,11 @@
-/* Modules */
-import { resolve } from "path";
+/* Functions */
+import { resolvePath } from "./resolvePath";
 
-/* Constants */
-const cwd = process.cwd();
-
-export const importModule = (path : string, debug: boolean = true) : any => {
+export const importModule = (path : string) : any => {
     try {
-        return require(resolve(cwd, path));
+        return require(resolvePath(path));
     } catch (e) {
-        debug && console.error(e);
+        console.error(e);
         return {};
     }
 }

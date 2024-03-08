@@ -1,8 +1,11 @@
-import { resolve } from "path";
+/* Modules */
 import { existsSync } from "fs";
 
-const pathJs = resolve(process.cwd(), "./em.config.js");
-const pathTs = resolve(process.cwd(), "./em.config.ts");
+/* Functions */
+import { resolvePath } from "../functions/utils/resolvePath";
+
+const pathJs = resolvePath("./em.config.js");
+const pathTs = resolvePath("./em.config.ts");
 if (!existsSync(pathJs) && !existsSync(pathTs))
     throw new Error("Missing ExpressMultithread configuration file (em.config.{ts|js})");
 
