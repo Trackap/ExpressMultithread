@@ -73,6 +73,7 @@ export class CallLoop {
         ret.promise = new Promise((solve) => {
             /* Create passed next fn */
             ret.done = (arg?: any) => {
+                if (ret.nextCalled) return;
                 ret.nextCalled = true;
                 solve(arg);
             };
