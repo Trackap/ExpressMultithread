@@ -1,10 +1,11 @@
 /* Modules */
 import { workerData, parentPort, isMainThread } from "worker_threads";
-import { register } from 'ts-node';
 
-/* Register ts-node if were're in compiled version */
+/* Priority for ts regisration */
+import { registerTS } from "../functions/utils/register";
+registerTS();
 import Config from "../config";
-__filename.endsWith(".js") && register(require(Config.tsconfigPath));
+registerTS(Config.tsconfigPath);
 
 /* Classes */
 import { CallLoop } from "../class/CallLoop";
@@ -31,7 +32,7 @@ import {
 import { Request } from "express";
 
 /* Constants */
-import {message, noMain, fnStr, nl, routeNotFound, route, router} from "../constants/strings";
+import {message, noMain, fnStr, routeNotFound, route, router} from "../constants/strings";
 
 const pNext = function (id: number, tid: string, arg: Serializable) : void {
     postParent({
