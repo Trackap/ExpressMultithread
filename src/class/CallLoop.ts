@@ -104,7 +104,7 @@ export class CallLoop {
         /* Fetch next error middleware */
         for (let j = i; j < this.callstack.length; j++) {
             if (this.callstack[j].length === 4)
-                return this.exec(i, err);
+                return this.exec(j, err);
         }
         /* No error middleware reject */
         return this.exec(this.callstack.length, err);
