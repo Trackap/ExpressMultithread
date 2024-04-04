@@ -14,7 +14,7 @@
     "build": "npm run clean && tsc",
     "test": "jest --config jest.config.ts",
     "pre-publish": "npm run test && npm run build && npm version patch",
-    "publish": "git push && npm publish && npm run clean"
+    "pub": "git push && npm publish && npm run clean"
   },
   "repository": {
     "type": "git",
