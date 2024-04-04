@@ -48,6 +48,7 @@ class Child {
     private id : number;
     /* All routes */
     private routes : Record<string, InternalRoute> = {};
+    private sources : Source[] = [];
 
     constructor() {
         /* Set id */
@@ -100,7 +101,8 @@ class Child {
 
     private setSources(sources: Source[]) {
         let mid : Middleware[] = [];
-        this.routes = {}
+        this.routes = {};
+        this.sources = sources;
         for (let i = 0; i < sources.length; i++) {
             const s = sources[i];
             switch (s.type) {
@@ -157,8 +159,16 @@ class Child {
         }
         return mid;
     }
+
+    public get _routes() : Record<string, InternalRoute> {
+        return this.routes;
+    }
+
+    public get _sources() : Source[] {
+        return this.sources;
+    }
 }
 
 if (isMainThread)
     throw new Error(noMain)
-const child = new Child();
+export const child = new Child();
