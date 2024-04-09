@@ -28,8 +28,9 @@ export default class ReplacePlugin extends Plugin implements PluginRoute {
     public cb(route: InternalRoute, propertyKey : string, proto: ObjectPrototype<InternalRoute>) {
         const replace = proto[`${propertyKey}__replace`];
         /* The route doesn't have replace decorator */
-        if (!replace) return;
+        if (!replace) return route;
         /* Replace the path by the replace value */
         route.path = replace.value;
+        return route;
     }
 }

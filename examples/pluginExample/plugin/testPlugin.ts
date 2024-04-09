@@ -36,10 +36,11 @@ export default class ProtectPlugin extends Plugin implements PluginController {
     /* Define the callback which will be executed when the route will be mapped */
     public cb(controller: ControllerDecoratorOpts, proto : ObjectPrototype<ControllerDecoratorOpts>) {
         /* The controller doesn't have protect decorator */
-        if (!proto.__protect) return;
+        if (!proto.__protect) return controller;
         /* The controller doesn't have middlewares property */
         !controller.middlewares && (controller.middlewares = []);
         /* Add the middleware to the controller */
         controller.middlewares = [proto.__protect.value.mid, ...toArray(controller.middlewares)];
+        return controller;
     };
 };
