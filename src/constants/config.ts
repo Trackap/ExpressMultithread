@@ -24,7 +24,8 @@ const cfg = {
     debug: userCfg?.debug ?? false,
     verbose: userCfg?.verbose ?? true,
     restartThreads: userCfg?.restartThreads ?? true,
-    tsconfigPath: userCfg?.tsconfigPath ?? resolvePath("./tsconfig.json")
+    tsconfigPath: userCfg?.tsconfigPath ?? resolvePath("./tsconfig.json"),
+    awaitable: userCfg?.awaitable
 };
 
 export default cfg;

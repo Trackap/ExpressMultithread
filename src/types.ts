@@ -109,6 +109,7 @@ export interface BaseConfig {
     verbose?: boolean; // Enable status messages of Parent & Child threads
     restartThreads?: boolean; // Restart a child if a crash occur
     tsconfigPath?: string; // Specify tsconfig.json path
+    awaitable?: Promise<void>; // Awaitable promise to resolve before starting parent & child threads
 }
 
 export enum SourceType {

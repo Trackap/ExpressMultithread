@@ -62,9 +62,11 @@ class Child {
         this.initChild();
     };
 
-    private initChild() : void {
+    private async initChild() : Promise<void> {
+        /* Await user promise if needed */
+        Config.awaitable && await Config.awaitable;
         /* Handle messages */
-        parentPort!.on(message, async (data: string) => {
+        parentPort!.on(message, (data: string) => {
             /* Deserialize data */
             const parsed = JSON.parse(data);
             switch (parsed.cmd) {
