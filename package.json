@@ -15,9 +15,9 @@
     "test": "jest --config jest.config.ts",
     "reinstall": "rimraf ./node_modules && npm ci",
     "pre-publish": "npm run reinstall && npm run test && npm run build",
-    "publish:patch": "npm run pre-publish && npm version patch && git push && npm publish --access=restricted && npm run clean",
-    "publish:minor": "npm run pre-publish && npm version minor && git push && npm publish --access=restricted && npm run clean",
-    "publish:major": "npm run pre-publish && npm version major && git push && npm publish --access=restricted && npm run clean"
+    "publish:patch": "npm run pre-publish && npm version patch && git push && npm publish  && npm run clean",
+    "publish:minor": "npm run pre-publish && npm version minor && git push && npm publish && npm run clean",
+    "publish:major": "npm run pre-publish && npm version major && git push && npm publish && npm run clean"
   },
   "repository": {
     "type": "git",
