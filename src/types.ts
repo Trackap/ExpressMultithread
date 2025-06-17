@@ -122,11 +122,3 @@ export interface Source {
     type: SourceType;
     args?: Serializable[];
 }
-
-export interface NextContext {
-    nextCalled: boolean;
-    promise: Promise<any>;
-    done: (arg?: any) => any;
-    complete: (arg?: any) => void;
-}
-

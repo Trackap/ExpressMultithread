@@ -16,7 +16,6 @@ import { pathToRoute } from "../functions/pathToRoute";
 import { overrideRes } from "../functions/overrideRes";
 import { postParent } from "../functions/utils/postMessage";
 import { importModule } from "../functions/utils/importModule";
-import { makeObj } from "../functions/utils/makeObj";
 
 /* Types */
 import {
@@ -33,15 +32,6 @@ import { Request } from "express";
 
 /* Constants */
 import {message, noMain, fnStr, routeNotFound, route, router} from "../constants/strings";
-
-const pNext = function (id: number, tid: string, arg: Serializable) : void {
-    postParent({
-        cmd: ChildCmd.next,
-        id,
-        tid,
-        arg
-    });
-};
 
 class Child {
     /* Id of child */
@@ -95,10 +85,6 @@ class Child {
             throw new Error(routeNotFound);
         /* Loop through callstack */
         new CallLoop(req, overrideRes(this.id, _id), this.routes[k].callstack!).handle()
-            /* Handle next() */
-            .then((res: unknown) => pNext(this.id, _id, res === route || res === router ? res : undefined))
-            /* Handle errors */
-            .catch((e: Error) => pNext(this.id, _id, makeObj(e, Object.getOwnPropertyNames(e))));
     };
 
     private setSources(sources: Source[]) {
