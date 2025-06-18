@@ -31,22 +31,22 @@ export class CallLoop {
 
     private handler = {
         /* It's a callback */
-        2: (i: number, _err?: any) => {
+        2: async (i: number, _err?: any) => {
             /* Call endpoint */
-            (this.callstack[i] as Callback)(this.req, this.res);
+            await (this.callstack[i] as Callback)(this.req, this.res);
         },
         /* It's a middleware */
-        3: (i: number, _err?: any) => {
+        3: async (i: number, _err?: any) => {
             /* Call middleware */
-            (this.callstack[i] as Middleware)(this.req, this.res, this.getNext(i + 1))
+            await (this.callstack[i] as Middleware)(this.req, this.res, this.getNext(i + 1))
         },
         /* It's an error middleware */
-        4: (i: number, err?: any) => {
+        4: async (i: number, err?: any) => {
             /* Skip if no err */
             if (!err)
                 return this.handle(i + 1);
             /* Call error middleware */
-            (this.callstack[i] as ErrorMiddleware)(err, this.req, this.res, this.getNext(i + 1));
+            await (this.callstack[i] as ErrorMiddleware)(err, this.req, this.res, this.getNext(i + 1));
         }
     }
 
@@ -57,11 +57,8 @@ export class CallLoop {
                 err ? makeObj(err, Object.getOwnPropertyNames(err))
                 : undefined
             )
-        try {
-            this.handler[this.callstack[i].length](i, err)
-        } catch (e) {
-            this.goError(i + 1, e);
-        }
+        this.handler[this.callstack[i].length](i, err)
+            .catch((e: any) => this.goError(i + 1, e))
     }
 
     private getNext(index: number): NextFunction {
