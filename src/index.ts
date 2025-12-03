@@ -8,6 +8,11 @@ export * from "./decorators";
 /* Plugin class */
 export * from "./class/Plugin";
 
+/* Constants */
+export {
+    DispatcherType
+} from "./constants/strings";
+
 /* Types */
 export type {
     BaseConfig,

@@ -9,6 +9,7 @@ import Config from '../config';
 import { childFile, childNotFound, error, message, slash } from '../constants/strings';
 import { postChild } from '../functions/utils/postMessage';
 import { compareArray } from '../functions/utils/compareArray';
+import { DispatcherType } from '../constants/strings';
 
 class Parent {
     /* List of all childs */
@@ -17,6 +18,9 @@ class Parent {
     private _sources: Source[] = [];
     /* Incremental id for childs */
     private inc : number = 0;
+
+    /* Index for round robin dispatching */
+    private indexRobin: number = 0;
 
     constructor(threadCount : number = Config.threadCount) {
         /* Create X childs */
@@ -44,24 +48,28 @@ class Parent {
             if (z === -1) throw new Error(childNotFound);
             /* Handle cmds */
             switch (parsed.cmd) {
-                case ChildCmd.ready: 
+                case ChildCmd.ready: {
                     /* set child as ready */
                     this.childs[z].ready = true;
                     break;
-                case ChildCmd.response:
+                }
+                case ChildCmd.response: {
                     /* Get response index */
-                    const j = this.childs[z].tasks.findIndex((t) => t.id === parsed.tid);
+                    const task = this.childs[z].tasks.get(parsed.tid);
                     /* Send response */
-                    j !== -1  && (this.childs[z].tasks[j].res as any)[parsed.call](...parsed.args);
+                    task && (task.res as any)[parsed.call](...parsed.args);
                     break;
-                case ChildCmd.next:
-                    /* Get task index */
-                    let index = this.childs[z].tasks.findIndex((t) => t.id === parsed.tid);
-                    /* Remove task && get next */
-                    let next = (index !== -1 && this.childs[z].tasks.splice(index, 1).at(0)?.next);
-                    /* Call next if args are provided */
-                    parsed.arg !== undefined && next && next(parsed.arg);
+                }
+                case ChildCmd.next: {
+                    const task = this.childs[z].tasks.get(parsed.tid); 
+                    if (task) {                        
+                        /* Call next if args are provided */
+                        parsed.arg !== undefined && task.next(parsed.arg);
+                        /* Remove task && get next */
+                        this.childs[z].tasks.delete(parsed.tid);
+                    }
                     break;
+                }
                 default:
                     throw new Error(`Unknown command : '${parsed.cmd}'`);
             }
@@ -84,26 +92,42 @@ class Parent {
         this.childs.push({
             id: this.inc,
             instance: child,
-            tasks: [],
+            tasks: new Map<string, Task>(),
             ready: false
         });
     };
 
     public dispatchTask(task: Task) : void {
-        const occupation : number[] = [];
-        /* Get occupation of each child */
-        for (let i = 0; i < this.childs.length; i++) {
-            const child = this.childs[i];
-            child.ready ? occupation.push(child.tasks.length) : occupation.push(Infinity);
+        let i = 0;
+        switch (Config.dispatcher) {
+            case DispatcherType.ROUND_ROBIN: {
+                /* Round robin dispatching */
+                i = (this.indexRobin++) % this.childs.length;
+                break;
+            }
+            case DispatcherType.LEAST_CONNECTION: {
+                /* Get occupation of each child */
+                const occupation : number[] = this.childs.map((c) => c.ready ? c.tasks.size : Infinity);
+                /* Find less occupied child */
+                const min = Math.min(...occupation);
+                /* Get index of child less used */
+                i = occupation.indexOf(min);
+                break;
+            }
+            default: {
+                throw new Error(`Unknown dispatcher type: '${Config.dispatcher}'`);
+            }
         }
-        /* Dispatch task queue */
-        const min = Math.min(...occupation);
-        /* Get index of child less used */
-        const i = occupation.indexOf(min);
         /* Move task to child tasks */
-        this.childs[i].tasks.push(task);
-        /* Increase occupation score */
-        occupation[i]++;
+        this.childs[i].tasks.set(task.id, task);
+        /* Listen for response end / destroyed */
+        const cb = () => {
+            task.res.removeListener("close", cb);
+            task.res.removeListener("finish", cb);
+            this.childs[i].tasks.delete(task.id);
+        };
+        task.res.addListener("close", cb);
+        task.res.addListener("finish", cb);
         /* Send task to child */
         postChild(this.childs[i].instance, {
             cmd: ParentCmd.request,

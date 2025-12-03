@@ -9,14 +9,14 @@ import { importPlugin } from "../functions/importPlugins";
 import { resolvePath } from "../functions/utils/resolvePath";
 
 /* Types */
-import type { BaseConfig } from "../types";
+import type { BaseConfig, EmConfig } from "../types";
 import type { Request } from "express";
 
 /* Constants */
-import { cfgFile } from "../constants/strings";
+import { cfgFile, DispatcherType } from "../constants/strings";
 
 const userCfg = importModule(cfgFile)?.default as BaseConfig | undefined;
-const cfg = {
+export const cfg: EmConfig = {
     threadCount: (userCfg?.threadCount !== undefined ? userCfg?.threadCount : (process.env.THREAD_COUNT === undefined ? cpus().length : parseInt(process.env.THREAD_COUNT))),
     cleanRequest: userCfg?.cleanRequest ? (req: Request) => merge(userCfg!.cleanRequest!(req), cleanRequest(req)) : cleanRequest,
     plugins: importPlugin(userCfg?.plugins ?? []),
@@ -25,7 +25,8 @@ const cfg = {
     verbose: userCfg?.verbose ?? true,
     restartThreads: userCfg?.restartThreads ?? true,
     tsconfigPath: userCfg?.tsconfigPath ?? resolvePath("./tsconfig.json"),
-    awaitable: userCfg?.awaitable
+    awaitable: userCfg?.awaitable,
+    dispatcher: userCfg?.dispatcher ?? DispatcherType.ROUND_ROBIN
 };
 
 export default cfg;

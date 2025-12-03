@@ -1,6 +1,7 @@
 /* Types */
 import { Request, Response, NextFunction } from "express";
 import { Worker } from "worker_threads";
+import { DispatcherType } from "./constants/strings";
 
 export type RouteMethod = "get" | "post" | "put" | "delete" | "patch" | "head" | "options";
 
@@ -53,7 +54,7 @@ export interface ChildData {
     id: number;
     instance: Worker;
     ready: boolean;
-    tasks: Task[];
+    tasks: Map<string, Task>;
 }
 
 export enum ChildCmd {
@@ -100,16 +101,21 @@ export interface PluginController extends PluginBase {
     cb: (controller : ControllerDecoratorOpts, proto: ObjectPrototype<ControllerDecoratorOpts>) => ControllerDecoratorOpts;
 }
 
-export interface BaseConfig {
-    threadCount?: number;
-    cleanRequest?: (req: Request) => Request;
-    plugins?: string[]; // Load plugin
-    overrideConsole?: boolean; // Add color, thread id and log_level
-    debug?: boolean; // Enable logging of loaded plugins and controllers for each thread
-    verbose?: boolean; // Enable status messages of Parent & Child threads
-    restartThreads?: boolean; // Restart a child if a crash occur
-    tsconfigPath?: string; // Specify tsconfig.json path
+export interface EmConfig {
+    threadCount: number; // Number of worker threads
+    cleanRequest: (req: Request) => Request; // Function to clean request before sending to worker
+    overrideConsole: boolean; // Add color, thread id and log_level
+    plugins: (PluginBase)[]; // Computed list of loaded plugins
+    debug: boolean; // Enable logging of loaded plugins and controllers for each thread
+    verbose: boolean; // Enable status messages of Parent & Child threads
+    restartThreads: boolean; // Restart a child if a crash occur
+    tsconfigPath: string; // Specify tsconfig.json path
     awaitable?: Promise<void>; // Awaitable promise to resolve before starting parent & child threads
+    dispatcher: typeof DispatcherType[keyof typeof DispatcherType]; // Task dispatching strategy
+}
+
+export interface BaseConfig extends Partial<Omit<EmConfig, "plugins">> {
+    plugins?: string[]; // Load plugin
 }
 
 export enum SourceType {
