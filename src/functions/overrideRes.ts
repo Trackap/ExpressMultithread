@@ -6,39 +6,39 @@ import { notImplemented } from "../constants/strings";
 import { ChildCmd, Serializable } from "../types";
 import { postParent } from "./utils/postMessage";
 
+const internalProps = ["_id", "_tid"];
+const notImplementedProps = ["format", "get"];
+
 const handler: ProxyHandler<any> = {
     get(target, prop, receiver) {
         /* Internal props */
-        if (prop === "_id" || prop === "_tid") {
+        if (internalProps.includes(prop as string)) {
+            /* Return internal props */
             return target[prop];
         }
-        /* Transfer call to parent */
-        if (prop === "transferCall") {
-            return function (call: string, ...args: Serializable[]) {
-                postParent({
-                    cmd: ChildCmd.response,
-                    call,
-                    args,
-                    id: target._id,
-                    tid: target._tid
-                });
-                return receiver;
-            };
-        }
         /* Methods that are not implemented */
-        const notImpl = ["format", "get"];
-        if (notImpl.includes(prop as string)) {
+        if (notImplementedProps.includes(prop as string)) {
+            /* Return throwing function */
             return function () {
                 throw new Error(notImplemented);
             };
         }
         /* Else */
         return function (...args: Serializable[]) {
-            return receiver.transferCall(prop, ...args);
+            /* Post to parent informations */
+            postParent({
+                cmd: ChildCmd.response,
+                call: prop,
+                args,
+                id: target._id,
+                tid: target._tid
+            });
+            /* Return receiver for chaining */
+            return receiver;
         };
     },
     set(target, prop, value) {
-        if (prop === "_id" || prop === "_tid") {
+        if (internalProps.includes(prop as string)) {
             target[prop] = value;
         }
         return value;
@@ -46,6 +46,6 @@ const handler: ProxyHandler<any> = {
 };
 
 export function overrideRes(_id: number, _tid: string): Response {
-    const target = { _id, _tid };
-    return new Proxy(target, handler) as any as Response;
+    /* Return proxied response */
+    return new Proxy({ _id, _tid }, handler) as any as Response;
 }
