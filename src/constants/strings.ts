@@ -49,3 +49,8 @@ export const logConsole = "[L]";
 export const infoConsole = "[I]";
 export const warnConsole = "[W]";
 export const errorConsole = "[E]";
+
+export const DispatcherType = {
+    ROUND_ROBIN: 0,
+    LEAST_CONNECTION: 1
+} as const;
