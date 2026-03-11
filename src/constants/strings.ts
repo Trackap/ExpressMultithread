@@ -33,7 +33,6 @@ export const error = "error";
 /* Messages */
 export const childNotFound = "Child not found";
 export const noMain = "This file is not meant to be run in the main thread.";
-export const routeNotFound = "Route not found";
 export const notImplemented = "Not implemented";
 export const invalidPlugin = "Invalid plugin";
 export const keywordUse = "Decoration of a class method named with keyword (get or set)";

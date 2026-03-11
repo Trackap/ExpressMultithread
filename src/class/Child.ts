@@ -24,14 +24,13 @@ import {
     InternalRoute,
     Middleware,
     ParentCmd,
-    Serializable,
     Source,
     SourceType
 } from "../types";
 import { Request } from "express";
 
 /* Constants */
-import {message, noMain, fnStr, routeNotFound, route, router} from "../constants/strings";
+import {message, noMain, fnStr} from "../constants/strings";
 
 class Child {
     /* Id of child */
@@ -91,7 +90,7 @@ class Child {
         /* Get internal route name */
         const k = req.method.toLowerCase() + req.path;
         if (!this.routes[k])
-            throw new Error(routeNotFound);
+            throw new Error(`Route not found: ${k}`);
         /* Loop through callstack */
         new CallLoop(req, overrideRes(this.id, _id), this.routes[k].callstack!).handle()
     };
