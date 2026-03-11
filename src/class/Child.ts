@@ -64,7 +64,16 @@ class Child {
                     this.setSources(parsed.source);
                     break;
                 case ParentCmd.request:
-                    this.handleRequest(parsed.req, parsed.id);
+                    try {
+                        this.handleRequest(parsed.req, parsed.id);
+                    } catch (e) {
+                        postParent({
+                            cmd: ChildCmd.next,
+                            id: this.id,
+                            tid: parsed.id,
+                            arg: e
+                        });
+                    }
                     break;
                 default:
                     throw new Error(`Unknown command : '${parsed.cmd}'`);
