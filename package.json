@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/Trackap/ExpressMultithread#readme",
   "dependencies": {
-    "express": "^4.18.0",
+    "express": "^5.2.1",
     "typescript": "^5.0.0"
   },
   "devDependencies": {
